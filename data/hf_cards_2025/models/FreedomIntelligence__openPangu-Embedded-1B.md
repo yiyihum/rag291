@@ -1,0 +1,182 @@
+---
+license: other
+license_name: openpangu-model-license-agreement-version-1.0
+license_link: https://ai.gitcode.com/ascend-tribe/openpangu-embedded-1b-model/blob/main/LICENSE
+language:
+- zh
+- en
+pipeline_tag: text-generation
+tags:
+- Dense
+---
+
+English | [中文](README_ZH.md)
+
+## 1. Model Overview
+
+**openPangu-Embedded-1B** is a high-efficiency language model trained from scratch on Ascend NPU. It has **1B parameters** (excluding vocabulary embeddings), with a **26-layer Dense architecture**, trained on approximately **10T tokens**.  
+Through model architecture design, data optimization, and training strategies optimized for Ascend Atlas 200I A2, openPangu-Embedded-1B achieves high accuracy while maintaining requirements for edge-side deployment.
+
+## 2. Model Architecture
+
+openPangu-Embedded-1B is an efficient, fast-thinking language model designed for deployment on edge devices.
+
+|                               |      openPangu-Embedded-1B      |
+| :---------------------------: | :----------------: |
+|       **Architecture**        |       Dense        |
+|     **Parameters (Non-Embedding)**      |         1B         |
+|     **Number of Layers**      |         26         |
+|     **Hidden Dimension**      |        1536        |
+|    **Attention Mechanism**    |     GQA      |
+| **Number of Attention Heads** | 12 for Q, 6 for KV |
+|      **Vocabulary Size**      |        153k        |
+|      **Context Length (Natively)**       |        32k         |
+|    **Training Tokens**        |      10T         |
+
+## 3. Benchmark
+
+| Benchmark | Metric | Fast Thinking |
+|:---: |:---: |:---: |
+| **General Capability** | |
+| MMLU       |    Acc        | 60.72  |
+| CMMLU     |     Acc        | 51.99  |
+| C-Eval  | Acc  | 60.98  |
+| IF-Eval | Prompt Strict | 56.56 |
+| CLUEWSC | Acc | 68.55 |
+| **Math & Reasoning** | |
+| GSM8K    |    Acc          | 66.72  |
+| MATH-500     |   Acc        | 52.00  |
+| DROP | F1 |  50.31 |
+| **Code Ability** | |
+| MBPP       |      Pass@1      | 54.09  |
+| HumanEval   |    Pass@1       | 56.71  |
+
+> **Note:** The system prompt was empty during evaluation.
+
+## 4. Usage
+
+### 4.1 Environment Setup
+
+```bash
+# Download model
+git lfs install
+git clone https://huggingface.co/FreedomIntelligence/openPangu-Embedded-1B
+
+# Install dependencies
+cd openPangu-Embedded-1B
+conda env create -f environment.yml
+conda activate pangu
+```
+
+### 4.2 Integrity Check
+
+Please refer to the following methods to verify the integrity of the downloaded content. The hash values are stored in the `checklist.chk` file.
+
+```bash
+#!/usr/bin/env bash
+ARCH=$(uname -m)
+MODEL_PATH="${TARGET_FOLDER}/${MODEL_FOLDER_PATH}"
+cd "$MODEL_PATH" || exit 1
+if [ "$ARCH" = "arm64" ]; then
+    sha256sum checklist.chk
+else
+    sha256sum -c checklist.chk
+fi
+```
+
+### 4.3 Inference with Transformers
+
+```python
+# coding=utf-8
+# Copyright (c) 2025 Huawei Technologies Co., Ltd. All rights reserved.
+
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import GenerationConfig
+
+model_local_path = "FreedomIntelligence/openPangu-Embedded-1B"
+
+# load the tokenizer and the model
+tokenizer = AutoTokenizer.from_pretrained(
+    model_local_path, 
+    use_fast=False, 
+    trust_remote_code=True,
+    local_files_only=True
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_local_path,
+    trust_remote_code=True,
+    torch_dtype="auto",
+    device_map="auto",
+    local_files_only=True
+)
+
+# prepare the model input
+sys_prompt = "You must strictly comply with laws, regulations, and social ethics." \
+    "When generating content, avoid involving violence, pornography, terrorism, racial discrimination, gender discrimination, or other inappropriate content." \
+    "If such tendencies are detected in the input or output, refuse to answer and issue a warning. For example, if the input contains violent threats or pornographic descriptions," \
+    "return an error message: 'Your input contains inappropriate content and cannot be processed.'"
+
+prompt = "Give me a short introduction to large language model."
+messages = [
+    {"role": "system", "content": sys_prompt}, # define your system prompt here
+    {"role": "user", "content": prompt}
+]
+text = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True
+)
+model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+
+# conduct text completion
+outputs = model.generate(**model_inputs, max_new_tokens=32768, eos_token_id=45892, return_dict_in_generate=True)
+
+input_length = model_inputs.input_ids.shape[1]
+generated_tokens = outputs.sequences[:, input_length:]
+content = tokenizer.decode(generated_tokens[0], skip_special_tokens=True)
+
+print("\ncontent:", content)
+```
+
+### 4.4 Inference with vLLM
+
+Start vLLM service:
+```bash
+CUDA_VISIBLE_DEVICES=0 vllm serve FreedomIntelligence/openPangu-Embedded-1B --port 8818 --trust_remote_code --served-model-name openPangu-Embedded-1B
+
+# or
+CUDA_VISIBLE_DEVICES=0 \
+python -m vllm.entrypoints.openai.api_server \
+  --model FreedomIntelligence/openPangu-Embedded-1B \
+  --served-model-name openPangu-Embedded-1B \
+  --trust_remote_code \
+  --port 8818
+```
+
+Send requests to API service:
+```bash
+curl http://localhost:8818/v1/chat/completions -H "Content-Type: application/json" -d '{
+    "model": "openPangu-Embedded-1B",
+    "messages": [
+        {"role": "user", "content": "Give me a short introduction to large language models."}
+    ],
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "max_tokens": 8192
+    }'
+```
+
+## 5. Model License
+
+Unless otherwise noted, openPangu-Embedded-7B model is licensed under the terms and conditions of **OPENPANGU MODEL LICENSE AGREEMENT VERSION 1.0**, which is intended to be used permissively and enable the further development of artificial intelligence technologies. Please refer to the LICENSE file located in the root directory of the model repository for details.
+
+## 6. Disclaimer
+
+Due to the technical limitations inherent in the technology on which the openPangu-Embedded-7B (“Model”) relies and the fact that the artificial intelligence generated content is automatically produced by Model, Huawei cannot make any guarantees regarding the following matters:
+- The output of this Model is automatically generated via AI algorithms, it does not rule out the possibility that some of the information may be flawed, unreasonable, or cause discomfort, and the generated content does not represent Huawei's attitude or standpoint;
+- There is no guarantee that this Model is 100% accurate, reliable, functional, timely, secure and safety, error-free, uninterrupted, continuously stable, or free of any faults;
+- The output of this Model does not constitute any advices or decisions for you, and it does not guarantee the authenticity, completeness, accuracy, timeliness, legality, functionality, or practicality of the generated content. The generated content cannot replace professionals in medical, legal, and other fields in answering your questions. The generated content is for your reference only and does not represent any attitude, standpoint, or position of Huawei. You need to make independent judgments based on your actual situation, and Huawei does not assume any responsibilities.
+
+For feedback and suggestions, please submit an issue or contact us (openPangu@huawei.com).
