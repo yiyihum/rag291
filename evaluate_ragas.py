@@ -1,7 +1,7 @@
 # pip install ragas
 
 from ragas import evaluate, EvaluationDataset
-from ragas.metrics import LLMContextRecall, Faithfulness, FactualCorrectness
+from ragas.metrics import LLMContextRecall, ContextEntityRecall, Faithfulness, FactualCorrectness, AnswerCorrectness, ContextPrecision
 from ragas.llms import instructor_llm_factory, LangchainLLMWrapper
 
 from openai import OpenAI
@@ -30,9 +30,12 @@ def ragas_eval(dataset, eval_llm):
     results = evaluate(
         dataset=dataset,
         metrics=[
+            ContextEntityRecall(), # 上下文实体召回率
+            ContextPrecision(),   # 上下文精确度
+            # FactualCorrectness()  # 答案是否事实正确 (based on retrieved context)
             LLMContextRecall(),   # 检索的上下文是否包含正确信息
             Faithfulness(),       # 答案是否忠实于上下文
-            FactualCorrectness()  # 答案是否事实正确
+            AnswerCorrectness(),  # 答案是否正确 (based on ground truth)
         ],
         llm=eval_llm
     )
@@ -78,6 +81,17 @@ if __name__ == "__main__":
         [sample_docs[4]],      # 对应Lovelace
         [sample_docs[3]]       # 对应Darwin
     ]
+
+    # from utils import load_jsonl, load_csv, convert_json_to_string
+    # arxiv_data = load_jsonl("data/arxiv_llm_2025/arxiv_llm_2025.jsonl")
+    # corpus_abs = [item["abstract"] for item in arxiv_data]
+    # corpus_1 = [convert_json_to_string(item) for item in arxiv_data]
+
+    # contexts = corpus_1
+
+    # requests = load_jsonl("requests.jsonl")
+    # questions = [req["query"] for req in requests]
+    # ground_truths = [req["notes_for_judges"] for req in requests]
 
     # -------------------------------
     # 2️⃣ 构造 RAGAS 的 EvaluationDataset
