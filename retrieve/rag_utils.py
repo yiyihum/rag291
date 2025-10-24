@@ -162,7 +162,7 @@ def load_hf_cards(root: Path):
             out.append((txt, meta))
     return out
 
-# ---------- Filtering ----------
+# ---------- Filtering (kept for compatibility; not used by global indexing) ----------
 def year_of_iso(s):
     if not s:
         return None
@@ -172,84 +172,37 @@ def year_of_iso(s):
         return None
 
 def filter_docs_for_request(all_docs, req):
-    required = set(req.get("required_corpora") or [])
-    filters = req.get("filters") or {}
-    section = (filters.get("section") or "").strip()
+    """
+    Kept for backward compatibility, but NOT used by new retrievers.
+    New retrievers index the WHOLE corpus regardless of requests.jsonl.
+    """
+    return all_docs[:]  # just return everything
 
-    def ok(meta):
-        src = meta.get("source")
-        if required:
-            mapped = set()
-            for r in required:
-                if r == "arxiv": mapped.add("arxiv")
-                if r == "github": mapped.add("github")
-                if r == "hf_models": mapped.add("hf_model_card")
-                if r == "hf_datasets": mapped.add("hf_dataset_card")
-            if src not in mapped:
-                return False
-
-        if "arxiv_id" in filters:
-            if meta.get("arxiv_id") != filters["arxiv_id"]:
-                return False
-        if "year" in filters and src == "arxiv":
-            if meta.get("year") != filters["year"]:
-                return False
-
-        if "repo" in filters and src == "github":
-            if meta.get("repo") != filters["repo"]:
-                return False
-
-        if src in ("hf_model_card", "hf_dataset_card"):
-            hf_id = meta.get("hf_id")
-            if "model_id" in filters and src == "hf_model_card":
-                if hf_id != filters["model_id"]:
-                    return False
-            if "dataset_id" in filters and src == "hf_dataset_card":
-                if hf_id != filters["dataset_id"]:
-                    return False
-            if "dataset_ids" in filters and src == "hf_dataset_card":
-                if hf_id not in set(filters["dataset_ids"]):
-                    return False
-            if "year" in filters:
-                y = year_of_iso(meta.get("created_at") or "")
-                if y is not None and y != filters["year"]:
-                    return False
-        return True
-
-    filtered = []
-    for text, meta in all_docs:
-        if not ok(meta):
-            continue
-        t = text
-        if section and meta.get("source") in ("github", "hf_model_card", "hf_dataset_card"):
-            t2 = extract_md_section(t, section)
-            if t2:
-                t = t2
-        filtered.append((t, meta))
-    return filtered
-
-def prepare_chunks_for_request(all_docs, req, chunk_size=1000, chunk_overlap=200, enable_chunk=True):
-    docs = filter_docs_for_request(all_docs, req)
+# ---------- Global chunk preparation ----------
+def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable_chunk=True):
+    """
+    Build chunks over the ENTIRE corpus (ignore required_corpora/filters).
+    Return (texts, metas).
+    Each meta carries chunk_id (per-doc), char_start/end, global_idx, etc.
+    """
     texts, metas = [], []
-    global_idx = 0  
-
-    for text, meta in docs:
+    global_idx = 0
+    for text, meta in all_docs:
         if not enable_chunk:
             m = dict(meta)
             m.update({
-                "chunk_id": 0,                 
+                "chunk_id": 0,
                 "char_len": len(text),
                 "char_start": 0,
                 "char_end": len(text),
                 "chunk_size": -1,
                 "chunk_overlap": 0,
-                "global_idx": global_idx,      
+                "global_idx": global_idx,
             })
             texts.append(text)
             metas.append(m)
             global_idx += 1
             continue
-
 
         overlap = max(0, min(chunk_overlap, chunk_size - 1))
         i, n, doc_chunk_idx = 0, len(text), 0
@@ -259,7 +212,7 @@ def prepare_chunks_for_request(all_docs, req, chunk_size=1000, chunk_overlap=200
             if ch.strip():
                 m = dict(meta)
                 m.update({
-                    "chunk_id": doc_chunk_idx,   
+                    "chunk_id": doc_chunk_idx,
                     "char_len": len(ch),
                     "char_start": i,
                     "char_end": j,
@@ -274,10 +227,7 @@ def prepare_chunks_for_request(all_docs, req, chunk_size=1000, chunk_overlap=200
             if j == n:
                 break
             i = j - overlap
-
-    return texts, metas, docs
-
-
+    return texts, metas
 
 # ---------- SPM + TF-IDF ----------
 def train_or_load_sp(spm_dir: Path, prefix: str, spm_size: int, spm_type: str, corpus_samples):
@@ -343,11 +293,12 @@ def embed_queries(sp, queries, vocab):
     return Q.astype(np.float32)
 
 # ---------- Helpers ----------
-def dedup_used_docs(docs):
-    seen, used = set(), []
-    for _, m in docs:
-        key = (m.get("source"), m.get("path"), m.get("arxiv_id"), m.get("hf_id"), m.get("repo"))
+def dedup_by_parent(hits):
+    """Dedup top hits to parent docs by ('source','path','arxiv_id','hf_id','repo')."""
+    seen, out = set(), []
+    for h in hits:
+        key = (h.get("source"), h.get("path"), h.get("arxiv_id"), h.get("hf_id"), h.get("repo"))
         if key in seen:
             continue
-        seen.add(key); used.append(m)
-    return used
+        seen.add(key); out.append({k: h.get(k) for k in ["source","path","title","arxiv_id","hf_id","repo"] if k in h})
+    return out
