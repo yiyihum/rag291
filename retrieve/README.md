@@ -14,19 +14,23 @@ Each backend produces ranked results (`Top-K` chunks) and the document list used
 
 ```bash
 pip install -U faiss-cpu qdrant-client sentencepiece numpy
+```
 
+## 🚀 Usage
 
-🚀 Usage
 FAISS**
 
 Without Chunk:
+```bash
 python retrieve/faiss_retrieve.py \
   --root data \
   --requests-jsonl requests.jsonl \
   --topk 5 \
   --save-results retrieve_results/retrieval_results_faiss.json 
+```
 
 Chunk:
+```bash
 python retrieve/faiss_retrieve.py \
   --root data \
   --requests-jsonl requests.jsonl \
@@ -36,17 +40,22 @@ python retrieve/faiss_retrieve.py \
   --chunk-size 1000 \
   --chunk-overlap 200 \
   --include-context
+```
+
 
 Qdrant (Embedded mode)**
 
 Without Chunk:
+```bash
 python retrieve/qdrant_retrieve.py \
   --root data \
   --requests-jsonl requests.jsonl \
   --topk 5 \
   --save-results retrieve_results/retrieval_results_qdrant.json 
+```
 
 Chunk:
+```bash
 python retrieve/qdrant_retrieve.py \
   --root data \
   --requests-jsonl requests.jsonl \
@@ -56,8 +65,9 @@ python retrieve/qdrant_retrieve.py \
   --chunk-size 1000 \
   --chunk-overlap 200 \
   --include-context
+```
 
-📄 Output
+## 📄 Output
 
 All results are saved under retrieve_results/.
 
