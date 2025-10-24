@@ -1,0 +1,2 @@
+system,map,mrr@10,ndcg@10,primary_recall@10,primary_recall@20,primary_recall@50,queries_judged,recall@10,recall@20,recall@50
+open_source,1.0,1.0,1.0,,,,12,1.0,1.0,1.0

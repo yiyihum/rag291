@@ -1,0 +1,591 @@
+{
+  "Q1": {
+    "qid": "Q1",
+    "query": "Which dataset contains 6.5 million keyframes extracted from instructional videos and what are its key statistics including total text tokens and sample count?",
+    "answer_type": "table",
+    "intent": "dataset-discovery",
+    "filters": {
+      "dataset_id": "DAMO-NLP-SG/multimodal_textbook",
+      "year": 2025
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.47197749093422037,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/DAMO-NLP-SG__multimodal_textbook.md",
+        "title": "DAMO-NLP-SG__multimodal_textbook.md",
+        "hf_id": "DAMO-NLP-SG/multimodal_textbook",
+        "created_at": "2025-01-01T09:18:58+00:00",
+        "last_modified": "2025-03-17T16:51:28+00:00",
+        "downloads": 1668,
+        "likes": 148,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "task_categories:summarization",
+          "language:en",
+          "license:apache-2.0",
+          "size_categories:1M<n<10M",
+          "arxiv:2501.00958",
+          "region:us",
+          "Pretraining",
+          "Interleaved",
+          "Reasoning"
+        ],
+        "author": "DAMO-NLP-SG",
+        "chunk_id": 0,
+        "char_len": 10734,
+        "char_start": 0,
+        "char_end": 10734,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "---\nlicense: apache-2.0\ntask_categories:\n- text-generation\n- summarization\nlanguage:\n- en\ntags:\n- Pretraining\n- Interleaved\n- Reasoning\nsize_categories:\n- 1M<n<10M\n---\n\n# Multimodal-Textbook-6.5M\n<img src=\"./src/logo.png\" alt=\"Image\" style=\"width: 900px;\">    \n\n\n[![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2501.00958) [![Project](https://img.shields.io/badge/Project-Website-blue.svg)](https://multimodal-interleaved-textbook.github.io/) [![GitHub](https://img.shields.io/badge/GitHub-Code-181717?logo=github)](https://github.com/DAMO-NLP-SG/multimodal_tex"
+      }
+    ]
+  },
+  "Q2": {
+    "qid": "Q2",
+    "query": "Which safety-related dataset uses CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags?",
+    "answer_type": "table",
+    "intent": "dataset-metadata",
+    "filters": {
+      "dataset_id": "hackaprompt/Pliny_HackAPrompt_Dataset"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.4260837625861143,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/hackaprompt__Pliny_HackAPrompt_Dataset.md",
+        "title": "hackaprompt__Pliny_HackAPrompt_Dataset.md",
+        "hf_id": "hackaprompt/Pliny_HackAPrompt_Dataset",
+        "created_at": "2025-07-04T01:49:45+00:00",
+        "last_modified": "2025-07-25T23:33:25+00:00",
+        "downloads": 359,
+        "likes": 132,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "language:en",
+          "license:cc-by-4.0",
+          "size_categories:10K<n<100K",
+          "format:arrow",
+          "modality:text",
+          "library:datasets",
+          "library:mlcroissant",
+          "region:us",
+          "redteaming",
+          "safety",
+          "prompt-injections",
+          "jailbreaks"
+        ],
+        "author": "hackaprompt",
+        "chunk_id": 0,
+        "char_len": 13060,
+        "char_start": 0,
+        "char_end": 13060,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "---\ntask_categories:\n- text-generation\nlanguage:\n- en\ntags:\n- redteaming\n- safety\n- prompt-injections\n- jailbreaks\npretty_name: Pliny_HackAPrompt_Dataset\nlicense: cc-by-4.0\ncitation: \"@dataset{pliny_hackaprompt_2025,\\n  author    = {Michael Ilie, Saurav Vidyadhara,\\\n  \\ Fady Yanni, Sander Schulhoff},\\n  title     = {Pliny HackAPrompt Dataset},\\n \\\n  \\ year      = {2025},\\n  version   = {1.0},\\n  url       = {https://huggingface.co/datasets/hackaprompt/Pliny_HackAPrompt_Dataset},\\n\\\n  \\  note      = {Accessed 25 July 2025}\\n}\\n\"\nsize_categories:\n- 10K<n<100K\n---\n# Pliny Challenges README \n\nWelc"
+      }
+    ]
+  },
+  "Q3": {
+    "qid": "Q3",
+    "query": "What is the first Chinese counterspeech dataset and how was it created using LLM-as-a-Judge methodology?",
+    "answer_type": "paragraph",
+    "intent": "dataset-derivation",
+    "filters": {
+      "arxiv_id": "2501.00697"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.6793014269533344,
+        "source": "arxiv",
+        "arxiv_id": "2501.00697",
+        "title": "PANDA -- Paired Anti-hate Narratives Dataset from Asia: Using an\n  LLM-as-a-Judge to Create the First Chinese Counterspeech Dataset",
+        "primary_category": "cs.CL",
+        "categories": [
+          "cs.CL"
+        ],
+        "authors": [
+          "Michael Bennie",
+          "Demi Zhang",
+          "Bushi Xiao",
+          "Jing Cao",
+          "Chryseis Xinyi Liu",
+          "Jian Meng",
+          "Alayo Tripp"
+        ],
+        "year": 2025,
+        "pdf_url": "http://arxiv.org/pdf/2501.00697v2",
+        "link": "http://arxiv.org/abs/2501.00697v2",
+        "path": "data/arxiv_llm_2025/arxiv_llm_2025.jsonl",
+        "chunk_id": 0,
+        "char_len": 1442,
+        "char_start": 0,
+        "char_end": 1442,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "PANDA -- Paired Anti-hate Narratives Dataset from Asia: Using an\n  LLM-as-a-Judge to Create the First Chinese Counterspeech Dataset\nDespite the global prevalence of Modern Standard Chinese language, counterspeech (CS) resources for Chinese remain virtually nonexistent. To address this gap in East Asian counterspeech research we introduce the a corpus of Modern Standard Mandarin counterspeech that focuses on combating hate speech in Mainland China. This paper proposes a novel approach of generating CS by using an LLM-as-a-Judge, simulated annealing, LLMs zero-shot CN generation and a round-robi"
+      }
+    ]
+  },
+  "Q4": {
+    "qid": "Q4",
+    "query": "Which NVIDIA persona datasets have the highest download counts and what are their language support and licensing details?",
+    "answer_type": "table",
+    "intent": "dataset-comparison",
+    "filters": {
+      "dataset_ids": [
+        "nvidia/Nemotron-Personas",
+        "nvidia/Nemotron-Personas-Japan",
+        "nvidia/Nemotron-Personas-India"
+      ],
+      "year": 2025
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.4460849333313518,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/nvidia__Nemotron-Personas.md",
+        "title": "nvidia__Nemotron-Personas.md",
+        "hf_id": "nvidia/Nemotron-Personas",
+        "created_at": "2025-06-09T04:12:11+00:00",
+        "last_modified": "2025-06-09T18:21:17+00:00",
+        "downloads": 21117,
+        "likes": 200,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "language:en",
+          "license:cc-by-4.0",
+          "size_categories:100K<n<1M",
+          "format:parquet",
+          "modality:text",
+          "library:datasets",
+          "library:pandas",
+          "library:mlcroissant",
+          "library:polars",
+          "region:us",
+          "synthetic",
+          "personas",
+          "NVIDIA"
+        ],
+        "author": "nvidia",
+        "chunk_id": 0,
+        "char_len": 10805,
+        "char_start": 0,
+        "char_end": 10805,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 2,
+        "preview": "---\nlicense: cc-by-4.0\ntask_categories:\n- text-generation\nlanguage:\n- en\ntags:\n- synthetic\n- personas\n- NVIDIA\nsize_categories:\n- 100K<n<1M\n---\n\nNemotron-Personas: Synthetic Personas Aligned to Real-World Distributions\n=========================================================================\n<center>\n  <img src=\"images/nemotron_persona_approach.png\" alt=\"gretelai/synthetic_text_to_sql v1\" width=\"400px\">\n  <p><em>A compound AI approach to personas grounded in real-world distributions</em></p>\n</center>\n\n## Dataset Overview\nNemotron-Personas is an open-source (CC BY 4.0) dataset of synthetically"
+      },
+      {
+        "rank": 2,
+        "score": 0.2784004252213813,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/nvidia__Nemotron-Personas-Japan.md",
+        "title": "nvidia__Nemotron-Personas-Japan.md",
+        "hf_id": "nvidia/Nemotron-Personas-Japan",
+        "created_at": "2025-09-20T02:14:15+00:00",
+        "last_modified": "2025-09-24T00:02:54+00:00",
+        "downloads": 14301,
+        "likes": 80,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "language:ja",
+          "license:cc-by-4.0",
+          "size_categories:1M<n<10M",
+          "format:parquet",
+          "modality:image",
+          "modality:text",
+          "library:datasets",
+          "library:dask",
+          "library:mlcroissant",
+          "library:polars",
+          "region:us",
+          "synthetic",
+          "personas",
+          "NVIDIA"
+        ],
+        "author": "nvidia",
+        "chunk_id": 0,
+        "char_len": 18562,
+        "char_start": 0,
+        "char_end": 18562,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 1,
+        "preview": "---\nlicense: cc-by-4.0\ntask_categories:\n- text-generation\nlanguage:\n- ja\ntags:\n- synthetic\n- personas\n- NVIDIA\nsize_categories:\n- 1M<n<10M\n---\n\nNemotron-Personas-Japan\n=========================================================================\n<center>\n  <img src=\"images/nemotron_personas_japan_approach.png\" alt=\"Nemotron-Personas-Japan\" width=\"400px\">\n  <p><em>\u73fe\u5b9f\u4e16\u754c\u306e\u5206\u5e03\u306b\u57fa\u3065\u3044\u305f\u30da\u30eb\u30bd\u30ca\u751f\u6210\u306e\u305f\u3081\u306e\u8907\u5408AI\u30a2\u30d7\u30ed\u30fc\u30c1</em></p>\n</center>\n\n# \u30c7\u30fc\u30bf\u30bb\u30c3\u30c8\u6982\u8981 (Dataset Overview)\nNemotron-Personas-Japan \u306f\u3001\u65e5\u672c\u306b\u304a\u3051\u308b\u4eba\u53e3\u306e\u591a\u69d8\u6027\u3068\u8c4a\u304b\u3055\u3092\u6349\u3048\u308b\u3053\u3068\u3092\u76ee\u7684\u3068\u3057\u3001\u5b9f\u4e16\u754c\u306e\u4eba\u53e3\u7d71\u8a08\u3001\u5730\u7406\u7684\u5206\u5e03\u3001\u6027\u683c\u7279\u6027\u306e\u5206\u5e03\u306b\u57fa\u3065\u3044\u3066\u5408\u6210\u7684\u306b\u751f\u6210\u3055\u308c\u305f\u30da\u30eb\u30bd\u30ca\u306e\u30aa\u30fc\u30d7\u30f3\u30bd\u30fc\u30b9\u30c7\u30fc\u30bf\u30bb\u30c3\u30c8\u3067\u3059\u3002\u540d\u524d\u3001\u6027\u5225\u3001\u5e74\u9f62\u3001\u80cc\u666f\u3001\u5a5a\u59fb\u72b6\u6cc1\u3001\u5b66\u6b74\u3001\u8077\u696d\u3001\u5c45\u4f4f\u5730\u306a\u3069\u306e\u7d71\u8a08\u306b\u57fa\u3065\u3044\u3066\u751f\u6210\u3057\u305f\u521d\u306e\u30c7\u30fc\u30bf"
+      },
+      {
+        "rank": 3,
+        "score": 0.08942886833007124,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/nvidia__Nemotron-Personas-India.md",
+        "title": "nvidia__Nemotron-Personas-India.md",
+        "hf_id": "nvidia/Nemotron-Personas-India",
+        "created_at": "2025-10-13T21:03:26+00:00",
+        "last_modified": "2025-10-14T04:55:17+00:00",
+        "downloads": 2095,
+        "likes": 26,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "language:en",
+          "language:hi",
+          "license:cc-by-4.0",
+          "size_categories:1M<n<10M",
+          "format:parquet",
+          "modality:image",
+          "modality:text",
+          "library:datasets",
+          "library:dask",
+          "library:mlcroissant",
+          "library:polars",
+          "region:us",
+          "synthetic",
+          "personas",
+          "NVIDIA",
+          "Hindi",
+          "Devanagari"
+        ],
+        "author": "nvidia",
+        "chunk_id": 0,
+        "char_len": 30394,
+        "char_start": 0,
+        "char_end": 30394,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "---\nlicense: cc-by-4.0\ntask_categories:\n- text-generation\nlanguage:\n- en\n- hi\ntags:\n- synthetic\n- personas\n- NVIDIA\n- Hindi\n- Devanagari\nsize_categories:\n- 1M<n<10M\nconfigs:\n- config_name: default\n  data_files:\n  - split: en_IN\n    path: data/en_IN-*\n  - split: hi_Deva_IN\n    path: data/hi_Deva_IN-*\n  - split: hi_Latn_IN\n    path: data/hi_Latn_IN-*\ndataset_info:\n  features:\n  - name: uuid\n    dtype: string\n  - name: professional_persona\n    dtype: string\n  - name: linguistic_persona\n    dtype: string\n  - name: sports_persona\n    dtype: string\n  - name: arts_persona\n    dtype: string\n  - name: "
+      }
+    ]
+  },
+  "Q5": {
+    "qid": "Q5",
+    "query": "Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
+    "answer_type": "paragraph",
+    "intent": "paper-summary",
+    "filters": {
+      "arxiv_id": "2501.00712"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.5402185593897435,
+        "source": "arxiv",
+        "arxiv_id": "2501.00712",
+        "title": "Rethinking Addressing in Language Models via Contexualized Equivariant\n  Positional Encoding",
+        "primary_category": "cs.CL",
+        "categories": [
+          "cs.CL",
+          "cs.LG",
+          "I.2.6; I.2.7"
+        ],
+        "authors": [
+          "Jiajun Zhu",
+          "Peihao Wang",
+          "Ruisi Cai",
+          "Jason D. Lee",
+          "Pan Li",
+          "Zhangyang Wang"
+        ],
+        "year": 2025,
+        "pdf_url": "http://arxiv.org/pdf/2501.00712v2",
+        "link": "http://arxiv.org/abs/2501.00712v2",
+        "path": "data/arxiv_llm_2025/arxiv_llm_2025.jsonl",
+        "chunk_id": 0,
+        "char_len": 1600,
+        "char_start": 0,
+        "char_end": 1600,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "Rethinking Addressing in Language Models via Contexualized Equivariant\n  Positional Encoding\nTransformers rely on both content-based and position-based addressing mechanisms to make predictions, but existing positional encoding techniques often diminish the effectiveness of position-based addressing. Many current methods enforce rigid patterns in attention maps, limiting the ability to model long-range dependencies and adapt to diverse tasks. Additionally, most positional encodings are learned as general biases, lacking the specialization required for different instances within a dataset. To a"
+      }
+    ]
+  },
+  "Q6": {
+    "qid": "Q6",
+    "query": "Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
+    "answer_type": "table",
+    "intent": "model-evals",
+    "filters": {
+      "model_id": "nvidia/NVIDIA-Nemotron-Nano-9B-v2"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.3300759042036413,
+        "source": "hf_model_card",
+        "path": "data/hf_cards_2025/models/nvidia__NVIDIA-Nemotron-Nano-9B-v2.md",
+        "title": "nvidia__NVIDIA-Nemotron-Nano-9B-v2.md",
+        "hf_id": "nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+        "created_at": "2025-08-12T22:43:32+00:00",
+        "last_modified": null,
+        "downloads": 290778,
+        "likes": 408,
+        "license": null,
+        "pipeline_tag": "text-generation",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "nvidia",
+          "pytorch",
+          "text-generation",
+          "conversational",
+          "en",
+          "es",
+          "fr",
+          "de",
+          "it",
+          "ja",
+          "dataset:nvidia/Nemotron-Post-Training-Dataset-v1",
+          "dataset:nvidia/Nemotron-Post-Training-Dataset-v2",
+          "dataset:nvidia/Nemotron-Pretraining-Dataset-sample",
+          "dataset:nvidia/Nemotron-CC-v2",
+          "dataset:nvidia/Nemotron-CC-Math-v1",
+          "dataset:nvidia/Nemotron-Pretraining-SFT-v1",
+          "arxiv:2504.03624",
+          "arxiv:2508.14444",
+          "arxiv:2412.02595",
+          "base_model:nvidia/NVIDIA-Nemotron-Nano-12B-v2",
+          "base_model:finetune:nvidia/NVIDIA-Nemotron-Nano-12B-v2",
+          "license:other",
+          "endpoints_compatible",
+          "region:us"
+        ],
+        "author": null,
+        "chunk_id": 0,
+        "char_len": 47499,
+        "char_start": 0,
+        "char_end": 47499,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "---\nlicense: other\nlicense_name: nvidia-open-model-license\nlicense_link: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/\npipeline_tag: text-generation\ndatasets:\n- nvidia/Nemotron-Post-Training-Dataset-v1\n- nvidia/Nemotron-Post-Training-Dataset-v2\n- nvidia/Nemotron-Pretraining-Dataset-sample\n- nvidia/Nemotron-CC-v2\n- nvidia/Nemotron-CC-Math-v1\n- nvidia/Nemotron-Pretraining-SFT-v1\nlanguage:\n- en\n- es\n- fr\n- de\n- it\n- ja\nlibrary_name: transformers\ntags:\n- nvidia\n- pytorch\ntrack_downloads: true\nbase_model:\n- nvidia/NVIDIA-Nemotron-Nano-12B-v2-Base\n- nvidia/NV"
+      }
+    ]
+  },
+  "Q7": {
+    "qid": "Q7",
+    "query": "What are the PyPI installation commands for FlashInfer including optional cubin and JIT cache packages?",
+    "answer_type": "snippet_list",
+    "intent": "repo-installation",
+    "filters": {
+      "repo": "flashinfer-ai/flashinfer",
+      "section": "Install from PyPI"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.5718275020042893,
+        "source": "github",
+        "repo": "flashinfer-ai/flashinfer",
+        "title": "README.md",
+        "path": "data/github_readmes/flashinfer-ai/flashinfer/README.md",
+        "chunk_id": 0,
+        "char_len": 593,
+        "char_start": 0,
+        "char_end": 593,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "### Install from PyPI\n\nFlashInfer is available as a Python package for Linux. Install the core package with:\n\n```bash\npip install flashinfer-python\n```\n\n**Package Options:**\n- **flashinfer-python**: Core package that compiles/downloads kernels on first use\n- **flashinfer-cubin**: Pre-compiled kernel binaries for all supported GPU architectures\n- **flashinfer-jit-cache**: Pre-built kernel cache for specific CUDA versions\n\n**For faster initialization and offline usage**, install the optional packages to have most kernels pre-compiled:\n```bash\npip install flashinfer-python flashinfer-cubin"
+      }
+    ]
+  },
+  "Q8": {
+    "qid": "Q8",
+    "query": "Which GPU architectures does FlashInfer support including SM compute capabilities and beta support for newer architectures?",
+    "answer_type": "list",
+    "intent": "repo-hardware",
+    "filters": {
+      "repo": "flashinfer-ai/flashinfer",
+      "section": "GPU Support"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.6619431057871351,
+        "source": "github",
+        "repo": "flashinfer-ai/flashinfer",
+        "title": "README.md",
+        "path": "data/github_readmes/flashinfer-ai/flashinfer/README.md",
+        "chunk_id": 0,
+        "char_len": 140,
+        "char_start": 0,
+        "char_end": 140,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "## GPU Support\n\nFlashInfer currently provides support for NVIDIA SM architectures 75 and higher and beta support for 103, 110, 120, and 121."
+      }
+    ]
+  },
+  "Q9": {
+    "qid": "Q9",
+    "query": "What are the essential steps for setting up LangFair bias and fairness evaluation including installation, response generation, and metric computation?",
+    "answer_type": "ordered_list",
+    "intent": "workflow-summary",
+    "filters": {
+      "repo": "cvs-health/langfair",
+      "section": "Quickstart Guide"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.41193942603001826,
+        "source": "github",
+        "repo": "cvs-health/langfair",
+        "title": "README.md",
+        "path": "data/github_readmes/cvs-health/langfair/README.md",
+        "chunk_id": 0,
+        "char_len": 1986,
+        "char_start": 0,
+        "char_end": 1986,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "## \u26a1 Quickstart Guide\n### (Optional) Create a virtual environment for using LangFair\nWe recommend creating a new virtual environment using venv before installing LangFair. To do so, please follow instructions [here](https://docs.python.org/3/library/venv.html).\n\n### Installing LangFair\nThe latest version can be installed from PyPI:\n\n```bash\npip install langfair\n```\n\n### Usage Examples\nBelow are code samples illustrating how to use LangFair to assess bias and fairness risks in text generation and summarization use cases. The below examples assume the user has already defined a list of prompts f"
+      }
+    ]
+  },
+  "Q10": {
+    "qid": "Q10",
+    "query": "How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",
+    "answer_type": "paragraph",
+    "intent": "dataset-structure",
+    "filters": {
+      "dataset_id": "DAMO-NLP-SG/multimodal_textbook",
+      "section": "Visualize Our Textbook"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.31647255311727385,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/DAMO-NLP-SG__multimodal_textbook.md",
+        "title": "DAMO-NLP-SG__multimodal_textbook.md",
+        "hf_id": "DAMO-NLP-SG/multimodal_textbook",
+        "created_at": "2025-01-01T09:18:58+00:00",
+        "last_modified": "2025-03-17T16:51:28+00:00",
+        "downloads": 1668,
+        "likes": 148,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "task_categories:summarization",
+          "language:en",
+          "license:apache-2.0",
+          "size_categories:1M<n<10M",
+          "arxiv:2501.00958",
+          "region:us",
+          "Pretraining",
+          "Interleaved",
+          "Reasoning"
+        ],
+        "author": "DAMO-NLP-SG",
+        "chunk_id": 0,
+        "char_len": 1473,
+        "char_start": 0,
+        "char_end": 1473,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "## Visualize Our Textbook   \n\nDue to the large size of the dataset (our complete textbook dataset is 11GB for JSON files and 0.7TB for images), we sampled 100 samples and the corresponding images and stored them in the `example_data` folder: `./example_data/textbook_sample_100.json`.\n\nEach sample is stored in dict format as follows:\n```\n[\n{'images':  [keyframe1, None, keyframe2, None, keyframe3, None,.....],\n 'texts':   [None,      asr1,  None,      asr2, None,     asr3,.....],\n 'text_ocr_list':  [None, asr1+ocr1,  None, asr2+ocr2, None, asr3+ocr3,.....],\n 'metadata': [...],\n 'image_num': 15,\n"
+      }
+    ]
+  },
+  "Q11": {
+    "qid": "Q11",
+    "query": "What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use?",
+    "answer_type": "ordered_list",
+    "intent": "dataset-handling",
+    "filters": {
+      "dataset_id": "DAMO-NLP-SG/multimodal_textbook",
+      "section": "Learning about image_folder"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.32153248868386214,
+        "source": "hf_dataset_card",
+        "path": "data/hf_cards_2025/datasets/DAMO-NLP-SG__multimodal_textbook.md",
+        "title": "DAMO-NLP-SG__multimodal_textbook.md",
+        "hf_id": "DAMO-NLP-SG/multimodal_textbook",
+        "created_at": "2025-01-01T09:18:58+00:00",
+        "last_modified": "2025-03-17T16:51:28+00:00",
+        "downloads": 1668,
+        "likes": 148,
+        "license": null,
+        "pipeline_tag": null,
+        "tags": [
+          "task_categories:text-generation",
+          "task_categories:summarization",
+          "language:en",
+          "license:apache-2.0",
+          "size_categories:1M<n<10M",
+          "arxiv:2501.00958",
+          "region:us",
+          "Pretraining",
+          "Interleaved",
+          "Reasoning"
+        ],
+        "author": "DAMO-NLP-SG",
+        "chunk_id": 0,
+        "char_len": 631,
+        "char_start": 0,
+        "char_end": 631,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "### Learning about image_folder\nAfter you download 20 image segmentation files (`dataset_images_interval_7.tar.gz.part_*`), you need to merge them first and then decompress. Please do not unzip a single segmentation file alone. It will lead to an error.\n\n```\ncd multimodal_textbook\ncat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz\ntar -xzvf dataset_images_interval_7.tar.gz\n```\nAfter the above steps, you will get the image folder `dataset_images_interval_7`, which is approximately 600GB and contains 6 million keyframes. Each sub-folder in the `dataset_images_interval"
+      }
+    ]
+  },
+  "Q12": {
+    "qid": "Q12",
+    "query": "What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
+    "answer_type": "table",
+    "intent": "repo-metrics",
+    "filters": {
+      "repo": "cvs-health/langfair",
+      "section": "Supported Bias and Fairness Metrics"
+    },
+    "hits": [
+      {
+        "rank": 1,
+        "score": 0.15018928797507528,
+        "source": "github",
+        "repo": "cvs-health/langfair",
+        "title": "README.md",
+        "path": "data/github_readmes/cvs-health/langfair/README.md",
+        "chunk_id": 0,
+        "char_len": 2462,
+        "char_start": 0,
+        "char_end": 2462,
+        "chunk_size": -1,
+        "chunk_overlap": 0,
+        "global_idx": 0,
+        "preview": "## \ud83d\udcca Supported Bias and Fairness Metrics\nBias and fairness metrics offered by LangFair are grouped into several categories. The full suite of metrics is displayed below.\n\n##### Toxicity Metrics\n* Expected Maximum Toxicity ([Gehman et al., 2020](https://arxiv.org/abs/2009.11462))\n* Toxicity Probability ([Gehman et al., 2020](https://arxiv.org/abs/2009.11462))\n* Toxic Fraction ([Liang et al., 2023](https://arxiv.org/abs/2211.09110))\n\n##### Counterfactual Fairness Metrics\n* Strict Counterfactual Sentiment Parity ([Huang et al., 2020](https://arxiv.org/abs/1911.03064))\n* Weak Counterfactual Sentim"
+      }
+    ]
+  }
+}
