@@ -8,7 +8,7 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 
 import os, argparse
-from utils import load_jsonl, load_json, convert_json_to_string, read_text, write_text
+from utils import load_jsonl, load_json, write_jsonl, get_doc_content, call_openai
 
 def make_eval_dataset(questions, contexts, generated_answers, ground_truths):
     data_list = []
@@ -111,33 +111,25 @@ if __name__ == "__main__":
                     return h["rank"]
                 return -float(h.get("score", 0.0))
             hits_sorted = sorted(hits, key=sort_key)
-            docs = []
-            for h in hits_sorted:
-                path = "../" + h.get("path", "")
-                ext = os.path.splitext(path)[1].lower()
-                # find actual arxiv document item           
-                if ext == ".jsonl" and h.get("source") == "arxiv":
-                    for item in arxiv_corpus:
-                        if item["id"] == h.get("arxiv_id"):
-                            docs.append(convert_json_to_string(item))
-                            break
-                    # docs.append(convert_json_to_string(load_jsonl(path)))
-                elif ext == ".md":
-                    docs.append(read_text(path))
-                else:
-                    raise ValueError(f"Unsupported document format: {ext} for path: {path}")
+            docs = [get_doc_content(h) for h in hits_sorted]
             contexts.append(docs)
             
             # generated_answers.append(hits_sorted[0]["context"])
             # generated_answers.append(hits_sorted[0]["preview"])
+            tmp_query = obj.get("query", "")
+            prompt = tmp_query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
+            for d in docs:
+                prompt += d + '\n'
+            generated_answers.append(call_openai(prompt))
 
         requests = load_jsonl(args.qrels)
         questions = [req["query"] for req in requests]
         # need to fill with fluent generated answers, rather than id/instruction
         ground_truths = [req["ground_truth"] for req in requests]
+        write_jsonl(generated_answers, "../LLM_answer_for_qdrant_chunk.txt")
         # update with response data
         # generated_answers = load_json(args.responses_dir)
-        generated_answers = [req["llm_response"] for req in requests]
+        # generated_answers = [req["llm_response"] for req in requests]
 
         # print("questions:", questions[-1])
         # print("ground_truths:", ground_truths[-1])

@@ -37,6 +37,7 @@ def load_qrels(path: str, normalize_sections=True, key_name="rel"):
                     continue
 
                 # rel = int(obj.get("rel", 0))
+                # relevance is set to 1 in default, 0 means no relevance, and 2 means high relevance
                 rel = 1     # assume relevance if present
                 if qid and doc_id:
                     qrels[qid][doc_id] = rel
@@ -112,7 +113,15 @@ def dcg_at_k(gains, k):
     return dcg
 
 def ndcg_at_k(ranked_doc_ids, qrels_for_q, k):
-    gains = [qrels_for_q.get(doc_id, 0) for doc_id in ranked_doc_ids]
+    gains = []
+    seen_relevant = set()
+    for doc_id in ranked_doc_ids[:k]:
+        if doc_id in qrels_for_q and doc_id not in seen_relevant:
+            gains.append(qrels_for_q[doc_id])
+            seen_relevant.add(doc_id)
+        else:
+            gains.append(0)    
+    
     ideal = sorted(qrels_for_q.values(), reverse=True)
     if not ideal:
         return None  # undefined if no judged relevant
@@ -135,10 +144,15 @@ def average_precision(ranked_doc_ids, qrels_for_q):
         return None
     hits = 0
     precisions = []
+    
+    seen_relevant = set()
     for i, d in enumerate(ranked_doc_ids, start=1):
-        if d in relevant:
+        # Only count this as a hit if it's relevant AND we haven't seen it before
+        if d in relevant and d not in seen_relevant:
             hits += 1
             precisions.append(hits / i)
+            seen_relevant.add(d)
+    
     if not precisions:
         return 0.0
     return sum(precisions) / len(relevant)
