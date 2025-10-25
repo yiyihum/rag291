@@ -47,9 +47,10 @@ if __name__ == "__main__":
 
     ap = argparse.ArgumentParser(description="Evaluate retrieval runs against qrels with RAGAS.")
     ap.add_argument("--example", action="store_true", help="Run with example data")
+    ap.add_argument("--run_name", required=True, help="Help to name output files")
     ap.add_argument("--qrels", required=True, help="Path to qrels.jsonl or qrels.csv")  # same as ground truth
     ap.add_argument("--runs_path", default="runs", help="Directory containing system subfolders with per-Q JSON files")  # same as retrieved contexts
-    # ap.add_argument("--responses_dir", required=True, help="Directory containing system subfolders with per-Q generated answers")   # generated answers
+    ap.add_argument("--responses_dir", default=None, help="Directory containing system subfolders with per-Q generated answers")   # generated answers
     ap.add_argument("--out_dir", default="eval_results", help="Where to write leaderboard and breakdowns")
     ap.add_argument("--model_name", default="gpt-4.1-mini", help="LLM model name for evaluation")
     args = ap.parse_args()
@@ -114,22 +115,27 @@ if __name__ == "__main__":
             docs = [get_doc_content(h) for h in hits_sorted]
             contexts.append(docs)
             
-            # generated_answers.append(hits_sorted[0]["context"])
-            # generated_answers.append(hits_sorted[0]["preview"])
-            tmp_query = obj.get("query", "")
-            prompt = tmp_query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
-            for d in docs:
-                prompt += d + '\n'
-            generated_answers.append(call_openai(prompt))
+            if args.responses_dir is None:
+                # generated_answers.append(hits_sorted[0]["context"])
+                # generated_answers.append(hits_sorted[0]["preview"])
+                tmp_query = obj.get("query", "")
+                prompt = tmp_query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
+                for d in docs:
+                    prompt += d + '\n'
+                generated_answers.append(call_openai(prompt))
 
         requests = load_jsonl(args.qrels)
         questions = [req["query"] for req in requests]
         # need to fill with fluent generated answers, rather than id/instruction
         ground_truths = [req["ground_truth"] for req in requests]
-        write_jsonl(generated_answers, "../LLM_answer_for_qdrant_chunk.txt")
-        # update with response data
-        # generated_answers = load_json(args.responses_dir)
-        # generated_answers = [req["llm_response"] for req in requests]
+        if args.responses_dir is None:
+            write_jsonl(generated_answers, f"../LLM_answer_for_{args.run_name}.txt")
+        else:
+            generated_answers = load_jsonl(args.responses_dir)
+        
+            # update with response data
+            # generated_answers = load_json(args.responses_dir)
+            # generated_answers = [req["llm_response"] for req in requests]
 
         # print("questions:", questions[-1])
         # print("ground_truths:", ground_truths[-1])
@@ -167,7 +173,7 @@ if __name__ == "__main__":
     # -------------------------------
     print("RAG Evaluation Results:")
     print(results)
-    final_output_dir = os.path.join(args.out_dir, "ragas_evaluation_results.txt")
+    final_output_dir = os.path.join(args.out_dir, f"{args.run_name}_ragas_evaluation_results.txt")
     print(f"Save result to {final_output_dir}")
     with open(final_output_dir, "w", encoding="utf-8") as f:
         print(results, file=f)

@@ -17,6 +17,7 @@ def load_qrels(path: str, normalize_sections=True, key_name="rel"):
         {"qid": "Q1", "doc_id": "doc_1", "rel": 1}
         {"qid": "Q1", "doc_id": "doc_2", "rel": 0}
         {"qid": "Q2", "doc_id": "doc_3", "rel": 1}
+    And rel can be larger than 1 (such as 2,3...) if the document is more relevant to query 
     """
     qrels = defaultdict(dict)  # qid -> doc_id -> rel
     ext = os.path.splitext(path)[1].lower()
@@ -114,6 +115,7 @@ def dcg_at_k(gains, k):
 
 def ndcg_at_k(ranked_doc_ids, qrels_for_q, k):
     gains = []
+    # We need to track seen doc_ids to prevent double-counting gain from multiple chunks of the same document.
     seen_relevant = set()
     for doc_id in ranked_doc_ids[:k]:
         if doc_id in qrels_for_q and doc_id not in seen_relevant:
@@ -145,6 +147,7 @@ def average_precision(ranked_doc_ids, qrels_for_q):
     hits = 0
     precisions = []
     
+    # We must track seen doc_ids to prevent double-counting
     seen_relevant = set()
     for i, d in enumerate(ranked_doc_ids, start=1):
         # Only count this as a hit if it's relevant AND we haven't seen it before
