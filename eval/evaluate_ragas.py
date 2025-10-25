@@ -128,17 +128,16 @@ if __name__ == "__main__":
                     raise ValueError(f"Unsupported document format: {ext} for path: {path}")
             contexts.append(docs)
             
-            # TODO: temp response
             # generated_answers.append(hits_sorted[0]["context"])
-            generated_answers.append(hits_sorted[0]["preview"])
-
+            # generated_answers.append(hits_sorted[0]["preview"])
 
         requests = load_jsonl(args.qrels)
         questions = [req["query"] for req in requests]
-        # TODO: need to fill with fluent generated answers, rather than id/instruction
-        ground_truths = [req["notes_for_judges"] for req in requests]
-        # TODO: update with response data
+        # need to fill with fluent generated answers, rather than id/instruction
+        ground_truths = [req["ground_truth"] for req in requests]
+        # update with response data
         # generated_answers = load_json(args.responses_dir)
+        generated_answers = [req["llm_response"] for req in requests]
 
         # print("questions:", questions[-1])
         # print("ground_truths:", ground_truths[-1])

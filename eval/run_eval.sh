@@ -1,5 +1,11 @@
+runs_path="../retrieve_results/faiss/retrieval_results_faiss.json"
+runs_path="../retrieve_results/faiss_chunk/retrieval_results_chunk_faiss.json"
+runs_path="../retrieve_results/qdrant/retrieval_results_qdrant.json"
+runs_path="../retrieve_results/qdrant_chunk/retrieval_results_chunk_qdrant.json"
+
 # evaluate based on doc_id
-python evaluate.py --runs_dir ../retrieve_results --qrels ../requests.jsonl --ndcg_k 2
+# once for all subsets
+python evaluate.py --runs_dir ../retrieve_results --qrels ../requests.jsonl # --ndcg_k 2
 
 # evaluate based on doc content with LLM
-python evaluate_ragas.py --runs_path ../retrieve_results/retrieval_results_faiss.json --qrels ../requests.jsonl --model_name gpt-4.1-mini
+python evaluate_ragas.py --runs_path $run_path --qrels ../requests.jsonl --model_name gpt-4.1-mini
