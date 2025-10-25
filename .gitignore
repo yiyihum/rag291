@@ -11,3 +11,6 @@ wheels/
 uv.lock
 pyproject.toml
 .python-version
+
+# SentencePiece model and vocab files
+spm_assets/

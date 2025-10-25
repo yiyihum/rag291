@@ -6,6 +6,8 @@ from datetime import datetime
 from typing import List, Tuple, Dict, Any
 import numpy as np
 import sentencepiece as spm
+from sentence_transformers import SentenceTransformer
+import torch
 
 # ---------- IO ----------
 def read_jsonl(path: Path):
@@ -291,6 +293,56 @@ def embed_queries(sp, queries, vocab):
                 Q[i, j] = float(c)
     Q /= (np.linalg.norm(Q, axis=1, keepdims=True) + 1e-12)
     return Q.astype(np.float32)
+
+
+def build_dense_encoder(model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
+    """
+    Load a sentence-transformers embedding model.
+    Returns the model object.
+    """
+    if SentenceTransformer is None:
+        raise RuntimeError(
+            "sentence-transformers not installed. pip install sentence-transformers"
+        )
+    model = SentenceTransformer(model_name, device="cuda" if torch.cuda.is_available() else "cpu")
+    return model
+
+def build_dense_embeddings(model, texts, normalize=True):
+    """
+    Encode a list of strings -> np.ndarray [N, dim]
+    Optionally L2-normalize the rows.
+    """
+    import numpy as np
+    embs = model.encode(
+        texts,
+        batch_size=32,
+        show_progress_bar=False,
+        convert_to_numpy=True,
+        normalize_embeddings=False, 
+    )
+    if normalize:
+        norms = np.linalg.norm(embs, axis=1, keepdims=True) + 1e-12
+        embs = embs / norms
+    return embs.astype(np.float32)
+
+def embed_queries_dense(model, queries, normalize=True):
+    """
+    Same as build_dense_embeddings but for queries (list of str).
+    Returns shape [len(queries), dim]
+    """
+    import numpy as np
+    qembs = model.encode(
+        queries,
+        batch_size=32,
+        show_progress_bar=False,
+        convert_to_numpy=True,
+        normalize_embeddings=False,
+    )
+    if normalize:
+        norms = np.linalg.norm(qembs, axis=1, keepdims=True) + 1e-12
+        qembs = qembs / norms
+    return qembs.astype(np.float32)
+
 
 # ---------- Helpers ----------
 def dedup_by_parent(hits):

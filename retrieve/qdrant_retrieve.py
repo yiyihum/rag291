@@ -24,6 +24,19 @@ def build_args():
     ap.add_argument("--spm-prefix", type=str, default="llm_assets_bpe")
     ap.add_argument("--spm-size", type=int, default=4000)
     ap.add_argument("--spm-type", type=str, default="bpe", choices=["bpe","unigram","char","word"])
+    ap.add_argument(
+        "--embedding-type",
+        type=str,
+        default="dense",
+        choices=["tfidf", "dense"],
+        help="Which embedding to use for retrieval."
+    )
+    ap.add_argument(
+        "--dense-model-name",
+        type=str,
+        default="BAAI/bge-base-en-v1.5",
+        help="HF model name for dense embedding if --embedding-type=dense"
+    )
     ap.add_argument("--enable-chunk", action="store_true", help="Enable chunking (default off)")
     ap.add_argument("--chunk-size", type=int, default=1000)
     ap.add_argument("--chunk-overlap", type=int, default=200)
@@ -89,23 +102,39 @@ def main():
         print("No documents found under --root.", file=sys.stderr); sys.exit(1)
     print(f"[INFO] Loaded docs: arxiv={len(arxiv_docs)} github={len(gh_docs)} hf={len(hf_docs)} total={len(all_docs)}")
 
-    # 2) Train SPM on full texts
-    sp = train_or_load_sp(Path(args.spm_dir), args.spm_prefix, args.spm_size, args.spm_type, [t for t,_ in all_docs])
-
-    # 3) Chunk ENTIRE corpus once
+    # 2) Chunk ENTIRE corpus once
     texts, metas = prepare_chunks_all_docs(all_docs, args.chunk_size, args.chunk_overlap, enable_chunk=args.enable_chunk)
     if not texts:
         print("No chunks/texts prepared.", file=sys.stderr); sys.exit(2)
     print(f"[INFO] Prepared chunks: {len(texts)} (enable_chunk={args.enable_chunk})")
 
-    # 4) TF-IDF + vocab
-    pieces_list = [sp_encode(sp, t) for t in texts]
-    xb, vocab = build_tfidf(pieces_list)
+    # 3) Build embedding
+    if args.embedding_type == "tfidf":
+        # SentencePiece tokenizer + TF-IDF
+        sp = train_or_load_sp(
+            Path(args.spm_dir),
+            args.spm_prefix,
+            args.spm_size,
+            args.spm_type,
+            [t for t,_ in all_docs]
+        )
+        pieces_list = [sp_encode(sp, t) for t in texts]
+        xb, vocab = build_tfidf(pieces_list)
 
-    # 5) Build Qdrant collection once
+    elif args.embedding_type == "dense":
+        # sentence-transformers encoder
+        enc_model = build_dense_encoder(args.dense_model_name)
+        xb = build_dense_embeddings(enc_model, texts)
+        sp = None
+        vocab = None
+
+    else:
+        raise ValueError("unknown embedding_type")
+
+    # 4) Build Qdrant collection once
     client = build_qdrant_index(xb, metas, args.collection, qdrant_path=args.qdrant_path)
 
-    # 6) Read requests (only for queries; filters are ignored for indexing)
+    # 5) Read requests (only for queries; filters are ignored for indexing)
     requests = read_jsonl(Path(args.requests_jsonl))
     if not requests:
         print("Empty requests.jsonl", file=sys.stderr); sys.exit(3)
@@ -115,7 +144,10 @@ def main():
     for req in requests:
         qid = req.get("qid") or "QUNK"
         query = req.get("query") or ""
-        qv = embed_queries(sp, [query], vocab)
+        if args.embedding_type == "tfidf":
+            qv = embed_queries(sp, [query], vocab)
+        else:
+            qv = embed_queries_dense(enc_model, [query])
 
         k_eff = min(args.topk, len(texts))
         hits = qdrant_search(client, args.collection, qv, k_eff,
