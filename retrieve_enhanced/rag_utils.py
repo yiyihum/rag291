@@ -154,12 +154,6 @@ def load_github_readmes(root: Path, enable_cleaning: bool = True):
         repo = "/".join(parts[-3:-1]) if len(parts) >= 3 else ""
         meta = {"source": "github", "repo": repo, "title": p.name, "path": str(p)}
         out.append((txt, meta))
-    return outth(f)
-        txt = read_text_file(p)
-        parts = p.parts
-        repo = "/".join(parts[-3:-1]) if len(parts) >= 3 else ""
-        meta = {"source": "github", "repo": repo, "title": p.name, "path": str(p)}
-        out.append((txt, meta))
     return out
 
 def load_hf_cards(root: Path):
@@ -197,11 +191,6 @@ def load_hf_cards(root: Path):
             out.append((txt, meta))
     return out
 
-# ---------- Filtering (kept for compatibility; not used by global indexing) ----------
-def year_of_iso(s):
-    if not s:
-        return None
-    try:
 # ---------- Global chunk preparation ----------
 def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable_chunk=True, 
                            use_semantic_chunking=False, use_summary_context=False,

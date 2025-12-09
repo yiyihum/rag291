@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-import faiss
 import numpy as np
 from typing import List, Dict, Any, Optional
 
@@ -15,6 +14,9 @@ from rag_utils import (
     build_dense_encoder, build_dense_embeddings, embed_queries_dense,
     train_or_load_sp, sp_encode, build_tfidf, embed_queries
 )
+
+# Import faiss after torch (in rag_utils) to avoid segfault on macOS
+import faiss
 
 class RetrievalSystem:
     def __init__(self, root_dir: str, processed_file: str = None, embedding_type: str = "dense", chunk_size: int = 1000, chunk_overlap: int = 200):
@@ -43,8 +45,10 @@ class RetrievalSystem:
                     if not line.strip(): continue
                     try:
                         d = json.loads(line)
-                        self.texts.append(d['text'])
-                        self.metas.append(d['metadata'])
+                        text = d.get('text') or d.get('content')
+                        if text:
+                            self.texts.append(text)
+                            self.metas.append(d['metadata'])
                     except Exception as e:
                         pass
             print(f"[INFO] Loaded {len(self.texts)} chunks from processed file.")
