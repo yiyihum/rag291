@@ -148,6 +148,7 @@ python3 retrieve_enhanced/run_requests.py \
   --output responses.jsonl \
   --data-root data \
   --processed-file processed_data.jsonl \
+  --embedding_type hybrid \
   --method agent-multi
 ```
 
@@ -158,6 +159,7 @@ python3 retrieve_enhanced/run_requests.py \
   --input requests.jsonl \
   --output responses.jsonl \
   --data-root data \
+  --embedding_type hybrid \
   --method agent-multi
 ```
 

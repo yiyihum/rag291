@@ -6,7 +6,8 @@ from llm_client import get_llm_client
 from retrieval_system import RetrievalSystem
 from rag_system import RAGSystem
 
-def process_requests(input_file: str, output_file: str, data_root: str, method: str, processed_file: str = None):
+def process_requests(input_file: str, output_file: str, data_root: str, method: str, 
+                    embedding_type: str, processed_file: str = None):
     print(f"[INFO] Loading requests from {input_file}")
     requests = []
     with open(input_file, 'r') as f:
@@ -18,7 +19,7 @@ def process_requests(input_file: str, output_file: str, data_root: str, method: 
     
     # Initialize RAG System
     print("[INFO] Initializing RAG System...")
-    retriever = RetrievalSystem(data_root, processed_file=processed_file, embedding_type="dense")
+    retriever = RetrievalSystem(data_root, processed_file=processed_file, embedding_type=embedding_type)
     llm = get_llm_client() # Defaults to OpenRouter
     rag = RAGSystem(retriever, llm)
     
@@ -86,8 +87,9 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True, help="Output responses.jsonl")
     parser.add_argument("--data-root", required=True, help="Data root directory")
     parser.add_argument("--processed-file", help="Optional pre-processed data file (jsonl)")
+    parser.add_argument("--embedding_type", default="dense", choices=["dense", "hybrid"])
     parser.add_argument("--method", default="agent-multi", choices=["simple", "agent-single", "agent-multi", "agent-loop"], help="RAG method to use")
     
     args = parser.parse_args()
     
-    process_requests(args.input, args.output, args.data_root, args.method, args.processed_file)
+    process_requests(args.input, args.output, args.data_root, args.method, args.embedding_type, args.processed_file)
