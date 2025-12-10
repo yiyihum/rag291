@@ -96,9 +96,9 @@ def process_single_document(
 
         # Chunking
         if chunk_size <= 0: # Disable chunking
-             chunks = [{'text': text, 'chunk_id': 0, 'type': 'full_doc'}]
+            chunks = [{'text': text, 'chunk_id': 0, 'type': 'full_doc'}]
         else:
-             chunks = processor.adaptive_chunking(text, meta, max_chunk_size=chunk_size)
+            chunks = processor.adaptive_chunking(text, meta, max_chunk_size=chunk_size)
         
         processed_chunks = []
         for chunk in chunks:

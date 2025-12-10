@@ -37,11 +37,11 @@ def process_requests(input_file: str, output_file: str, data_root: str, method: 
         print(f"Method: {method}")
         
         if method == "simple":
-            response, docs = rag.answer_simple(query)
+            response, docs = rag.answer_simple(query, top_n=5)
         elif method == "agent-single":
-            response, docs = rag.answer_agent_single(query)
+            response, docs = rag.answer_agent_single(query, top_n=5)
         elif method == "agent-loop":
-            response, docs = rag.answer_agent_loop(query)
+            response, docs = rag.answer_agent_loop(query, top_n=5)
         else:
             raise ValueError(f"Unknown method: {method}")
         
