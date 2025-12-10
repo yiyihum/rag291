@@ -1,0 +1,99 @@
+---
+pretty_name: Product Catalyst Synthetic Dataset
+language: en
+license: cc-by-sa-4.0
+size_categories:
+- 1K<n<10K
+task_categories:
+- text-generation
+tags:
+- product-management
+- synthetic-data
+- instruction-tuning
+- fine-tuning
+- reasoning
+---
+
+# Product Catalyst Synthetic Dataset
+
+## Dataset Description
+
+This dataset consists of 1,456 high-quality, synthetic conversation records designed specifically for the supervised fine-tuning (SFT) of an expert AI assistant in product development. The primary goal of this dataset is to train a language model to adopt the "Product Catalyst" persona: an expert advisor knowledgeable in product management, market research, software development methodologies, and business strategy.
+
+All data was synthetically generated on the **Neuralake** platform to simulate complex, realistic scenarios that a product professional might face. Each instance is a complete conversational turn, structured to be ideal for training modern chat-based models.
+
+## Dataset Structure
+
+### Data Instances
+
+Each record in the dataset is a JSON object containing a single key, `messages`, which holds a list of three dictionaries representing a full conversation turn.
+
+Here is an example of a single instance from the dataset:
+```json
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Product Catalyst, an expert in product development and launch, leveraging knowledge in product management, market research, software development, and business strategy to help organizations build and launch successful products with guaranteed market fit and results. As a trusted advisor, your role is to provide actionable guidance, strategic recommendations, and collaborative support to drive product success..."
+    },
+    {
+      "role": "user",
+      "content": "What strategies would you employ to conduct market research for a novel software product in a highly competitive and rapidly evolving industry, where customer needs and preferences are constantly shifting, and how would you utilize the insights gathered to inform product development and ensure a guaranteed market fit?"
+    },
+    {
+      "role": "assistant",
+      "content": "To conduct effective market research for a novel software product in a competitive and rapidly evolving industry, follow these organized steps:\n\n1. **Industry Analysis:**\n   - **Trend Analysis:** Identify current trends and technologies using industry reports and publications...\n\nBy systematically following these steps, you can effectively gather and utilize market insights to ensure your product meets market demands and stands out in a competitive landscape."
+    }
+  ]
+}
+````
+
+### Data Fields
+
+  * `messages`: A list containing message objects that form a single conversational exchange.
+      * `messages.role`: A string indicating the speaker. Possible values are `system`, `user`, or `assistant`.
+      * `messages.content`: A string containing the text of the message from the corresponding role.
+
+## Dataset Creation
+
+### Source Data
+
+This dataset is entirely **synthetic**. It was not derived from any real user data, private communications, or web scraping.
+
+The generation process was conducted on the **Neuralake** platform. The goal was to create a diverse set of high-quality examples that cover a wide range of topics within the product management domain. Prompts were designed to elicit detailed, structured, and expert-level responses from the generation model, which were then curated to form the final dataset.
+
+### Curation
+
+Each instance was curated to ensure it represented a complete and logical training example, containing the persona-defining `system` prompt, a challenging `user` query, and a high-value `assistant` response. During the fine-tuning process, any internal thought processes (like `<think>` blocks) within the `assistant` content were programmatically removed to ensure the model learned to generate only the final, clean output.
+
+## Considerations for Using the Data
+
+### Impact
+
+This dataset was created with the positive intention of developing an assistive tool to help entrepreneurs, product managers, and students improve their skills and processes for building successful products.
+
+### Discussion of Bias
+
+As the data is synthetically generated, it may reflect biases inherent in the language models used by the Neuralake platform for generation. The perspectives on business and strategy may not be globally representative and could lean towards common practices in Western tech industries.
+
+### Limitations
+
+  * The dataset is highly specialized and domain-specific. It is not suitable for training a general-purpose chatbot.
+  * The knowledge contained within is static and does not include real-time market data or information beyond its generation date.
+  * The quality of the fine-tuned model is directly dependent on the quality and diversity of the scenarios generated by the Neuralake platform.
+
+-----
+
+### Citation
+
+If you use this dataset in your work, please consider citing it:
+
+```bibtex
+@dataset{sarvasi_2025_product_catalyst_dataset,
+  author = {Sarvasi, Nicole},
+  title = {Product Catalyst Synthetic Dataset},
+  month = {July},
+  year = {2025},
+  url = {https://huggingface.co/datasets/nicolesarvasicosta/product-catalyst-dataset}
+}
+```
