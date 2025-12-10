@@ -96,10 +96,12 @@ class RetrievalSystem:
                         continue
                     try:
                         d = json.loads(line)
-                        text = d.get("text") or d.get("content")
+                        # Prioritize 'content' as it contains the enriched text for RAG
+                        text = d.get("content") or d.get("text")
                         if text:
                             self.texts.append(text)
-                            self.metas.append(d["metadata"])
+                            # Store the FULL document object as metadata to preserve all fields
+                            self.metas.append(d)
                     except Exception:
                         pass
             print(f"[INFO] Loaded {len(self.texts)} chunks from processed file.")
@@ -246,15 +248,11 @@ class RetrievalSystem:
     def retrieve(
         self,
         query: str,
-        sources: List[str] = None,
-        filters: Dict[str, Any] = None,
         top_k: int = 5,
     ) -> List[Dict[str, Any]]:
         """
-        Retrieve documents based on query, optional source filtering, and metadata filters.
-
-        sources: list of strings, e.g. ['arxiv', 'github', 'hf_model_card', 'hf_dataset_card']
-        filters: dict of metadata key-value pairs to match.
+        Retrieve documents based on query.
+        Filters are ignored in this version.
 
         Retrieval mechanism controlled by self.embedding_type:
             - "dense"  -> pure vector search (cosine)
@@ -275,73 +273,40 @@ class RetrievalSystem:
             q_tfidf = embed_queries(self.sp, [query], self.vocab).astype(np.float32)[0]
 
         # 2) Run retrieval
-        # Search with larger k to allow for filtering
-        search_k = top_k * 10 if (sources or filters) else top_k
-        search_k = max(search_k, top_k)
-
         if self.embedding_type == "dense":
-            cand_idx, scores = self._search_dense(q_dense, top_k=search_k)
+            cand_idx, scores = self._search_dense(q_dense, top_k=top_k)
         elif self.embedding_type == "tfidf":
-            cand_idx, scores = self._search_tfidf(q_tfidf, top_k=search_k)
+            cand_idx, scores = self._search_tfidf(q_tfidf, top_k=top_k)
         else:  # "hybrid"
             cand_idx, scores = self._search_hybrid(
-                q_dense, q_tfidf, top_k=search_k
+                q_dense, q_tfidf, top_k=top_k
             )
 
         hits: List[Dict[str, Any]] = []
         if cand_idx.size == 0:
             return hits
 
-        # 3) Apply source / metadata filters, keep top_k
+        # 3) Construct hits
         for idx in cand_idx:
             meta = self.metas[idx]
             text = self.texts[idx]
             score = float(scores[idx])
 
-            # 3.1 Filter by source
-            if sources:
-                src = meta.get("source", "")
-                allowed = False
-                for s in sources:
-                    if s == src:
-                        allowed = True
-                        break
-                    if s == "hf" and "hf_" in src:
-                        allowed = True
-                        break
-                if not allowed:
-                    continue
-
-            # 3.2 Filter by metadata (exact match or containment)
-            if filters:
-                match = True
-                for k, v in filters.items():
-                    if k in ["dataset_id", "model_id", "repo", "arxiv_id"]:
-                        val_str = str(v).lower()
-                        meta_vals = [
-                            str(meta.get("title", "")).lower(),
-                            str(meta.get("path", "")).lower(),
-                            str(meta.get("repo", "")).lower(),
-                            str(meta.get("id", "")).lower(),
-                        ]
-                        if not any(val_str in mv for mv in meta_vals):
-                            match = False
-                            break
-                    else:
-                        if k in meta and str(meta[k]) != str(v):
-                            match = False
-                            break
-                if not match:
-                    continue
+            # Resolve actual metadata dictionary
+            # If loaded from processed_data.jsonl, meta is the full doc 'd', so real metadata is in d['metadata']
+            # If loaded from raw files, meta is already the metadata dict
+            real_meta = meta.get("metadata", meta)
 
             hits.append(
                 {
                     "score": score,
                     "content": text,
-                    "metadata": meta,
+                    "metadata": real_meta,
+                    "raw_content": meta.get("raw_content") if isinstance(meta, dict) else None,
                 }
             )
-            if len(hits) >= top_k:
-                break
+
+        # sort final hits by score desc
+        hits = sorted(hits, key=lambda x: x["score"], reverse=True)
 
         return hits

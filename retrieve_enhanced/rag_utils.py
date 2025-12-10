@@ -9,23 +9,14 @@ import sentencepiece as spm
 from sentence_transformers import SentenceTransformer
 import torch
 
-# 导入文本处理模块
-try:
-    from text_processing import (
-        clean_text,
-        calculate_text_quality_score,
-        filter_low_quality_docs,
-        generate_extractive_summary,
-        extract_keywords,
-        semantic_chunking,
-        chunk_by_markdown_headers,
-        enrich_chunk_with_summary,
-        add_metadata_context,
-    )
-    TEXT_PROCESSING_AVAILABLE = True
-except ImportError:
-    TEXT_PROCESSING_AVAILABLE = False
-    print("[WARNING] text_processing module not available. Advanced features disabled.")
+# Import text processing modules
+from text_processing import (
+    clean_text,
+    generate_extractive_summary,
+    semantic_chunking,
+    chunk_by_markdown_headers,
+    enrich_chunk_with_summary,
+)
 
 # ---------- IO ----------
 def read_jsonl(path: Path):
@@ -118,8 +109,8 @@ def load_arxiv(root: Path, enable_cleaning: bool = True):
         jr = _s(r.get("journal_ref"))
         text = "\n".join([title, abstract, comment, jr]).strip()
         
-        # 文本清洗
-        if enable_cleaning and TEXT_PROCESSING_AVAILABLE:
+        # Text cleaning
+        if enable_cleaning:
             text = clean_text(text)
         
         meta = {
@@ -146,8 +137,8 @@ def load_github_readmes(root: Path, enable_cleaning: bool = True):
         p = Path(f)
         txt = read_text_file(p)
         
-        # 文本清洗
-        if enable_cleaning and TEXT_PROCESSING_AVAILABLE:
+        # Text cleaning
+        if enable_cleaning:
             txt = clean_text(txt)
         
         parts = p.parts
@@ -193,8 +184,7 @@ def load_hf_cards(root: Path):
 
 # ---------- Global chunk preparation ----------
 def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable_chunk=True, 
-                           use_semantic_chunking=False, use_summary_context=False,
-                           enable_quality_filter=False, min_quality_score=0.3):
+                           use_semantic_chunking=False, use_summary_context=False):
     """
     Build chunks over the ENTIRE corpus (ignore required_corpora/filters).
     Return (texts, metas).
@@ -203,23 +193,15 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
     New parameters:
     - use_semantic_chunking: Use semantic-aware chunking instead of fixed-size
     - use_summary_context: Add document summary to each chunk
-    - enable_quality_filter: Filter low-quality documents
-    - min_quality_score: Minimum quality score threshold
     """
-    # 质量过滤
-    if enable_quality_filter and TEXT_PROCESSING_AVAILABLE:
-        print(f"[INFO] Filtering documents with quality score >= {min_quality_score}")
-        all_docs = filter_low_quality_docs(all_docs, min_score=min_quality_score)
-        print(f"[INFO] Kept {len(all_docs)} documents after quality filtering")
-    
     texts, metas = [], []
     global_idx = 0
     
     for text, meta in all_docs:
-        # 生成文档级摘要 (如果需要)
+        # Generate document-level summary (if needed)
         doc_summary = ""
-        if use_summary_context and TEXT_PROCESSING_AVAILABLE:
-            # 优先使用已有的 abstract
+        if use_summary_context:
+            # Prioritize existing abstract
             if meta.get('abstract'):
                 doc_summary = meta['abstract'][:200]
             else:
@@ -227,7 +209,7 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
             meta['doc_summary'] = doc_summary
         
         if not enable_chunk:
-            # 不分块，保存整个文档
+            # No chunking, save the entire document
             m = dict(meta)
             m.update({
                 "chunk_id": 0,
@@ -239,7 +221,7 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
                 "global_idx": global_idx,
             })
             
-            # 添加摘要上下文
+            # Add summary context
             final_text = text
             if use_summary_context and doc_summary:
                 final_text = enrich_chunk_with_summary(text, doc_summary)
@@ -249,9 +231,9 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
             global_idx += 1
             continue
 
-        # 使用语义分块
-        if use_semantic_chunking and TEXT_PROCESSING_AVAILABLE:
-            # 根据文档类型选择分块策略
+        # Use semantic chunking
+        if use_semantic_chunking:
+            # Select chunking strategy based on document type
             if meta.get('source') == 'github' and 'README' in meta.get('title', ''):
                 chunks = chunk_by_markdown_headers(text, max_chunk_size=chunk_size)
             else:
@@ -274,12 +256,12 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
                     "global_idx": global_idx,
                 })
                 
-                # 添加 section 信息 (如果有)
+                # Add section info (if available)
                 if 'section_title' in chunk_info:
                     m['section_title'] = chunk_info['section_title']
                     m['section_level'] = chunk_info['section_level']
                 
-                # 添加摘要上下文
+                # Add summary context
                 final_text = ch
                 if use_summary_context and doc_summary:
                     final_text = enrich_chunk_with_summary(ch, doc_summary)
@@ -288,7 +270,7 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
                 metas.append(m)
                 global_idx += 1
         else:
-            # 使用固定大小分块 (原始逻辑)
+            # Use fixed-size chunking (original logic)
             overlap = max(0, min(chunk_overlap, chunk_size - 1))
             i, n, doc_chunk_idx = 0, len(text), 0
             while i < n:
@@ -306,7 +288,7 @@ def prepare_chunks_all_docs(all_docs, chunk_size=1000, chunk_overlap=200, enable
                         "global_idx": global_idx,
                     })
                     
-                    # 添加摘要上下文
+                    # Add summary context
                     final_text = ch
                     if use_summary_context and doc_summary:
                         final_text = enrich_chunk_with_summary(ch, doc_summary)

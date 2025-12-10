@@ -31,37 +31,19 @@ def process_requests(input_file: str, output_file: str, data_root: str, method: 
         required_corpora = req.get('required_corpora', [])
         filters = req.get('filters', {})
         
-        # NOTE: User requested NOT to use required_corpora for filtering.
-        # The agent/retriever should decide or search all.
-        sources = None 
         
         print(f"\n[INFO] Processing QID: {qid}")
         print(f"Query: {query}")
         print(f"Method: {method}")
         
-        retrieval_kwargs = {"sources": sources, "filters": filters}
-        
         if method == "simple":
-            response, docs = rag.answer_simple(query, retrieval_kwargs=retrieval_kwargs)
+            response, docs = rag.answer_simple(query)
         elif method == "agent-single":
-            response, docs = rag.answer_agent_single(query, retrieval_kwargs=retrieval_kwargs)
-        elif method == "agent-multi":
-            response, docs = rag.answer_agent_multi_query(query, retrieval_kwargs=retrieval_kwargs)
+            response, docs = rag.answer_agent_single(query)
         elif method == "agent-loop":
-            response, docs = rag.answer_agent_loop(query, retrieval_kwargs=retrieval_kwargs)
+            response, docs = rag.answer_agent_loop(query)
         else:
             raise ValueError(f"Unknown method: {method}")
-        
-        # Format retrieved results
-        formatted_docs = []
-        for d in docs:
-            meta = d.get('metadata', {})
-            # Use path or title as doc_id if id not present
-            doc_id = meta.get('id') or meta.get('path') or meta.get('title') or "unknown"
-            formatted_docs.append({
-                "doc_id": doc_id,
-                "chunk": d.get('content', '')
-            })
         
         result = {
             "qid": qid,
@@ -72,7 +54,7 @@ def process_requests(input_file: str, output_file: str, data_root: str, method: 
             "notes_for_judges": req.get('notes_for_judges'),
             "ground_truth": req.get('ground_truth'),
             "llm_response": response,
-            "retrieve_results": formatted_docs
+            "retrieve_results": docs
         }
         results.append(result)
         
@@ -88,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("--data-root", required=True, help="Data root directory")
     parser.add_argument("--processed-file", help="Optional pre-processed data file (jsonl)")
     parser.add_argument("--embedding_type", default="dense", choices=["dense", "hybrid"])
-    parser.add_argument("--method", default="agent-multi", choices=["simple", "agent-single", "agent-multi", "agent-loop"], help="RAG method to use")
+    parser.add_argument("--method", default="agent-single", choices=["simple", "agent-single", "agent-loop"], help="RAG method to use")
     
     args = parser.parse_args()
     output_file = args.output.replace(".jsonl", f"_{args.method}.jsonl")

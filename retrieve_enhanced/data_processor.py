@@ -1,24 +1,18 @@
 import json
 import glob
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from tqdm import tqdm
 from llm_client import LLMClient, get_llm_client
 
-# Try to import text_processing, handle if missing
-try:
-    from text_processing import (
-        clean_text,
-        calculate_text_quality_score,
-        semantic_chunking,
-        chunk_by_markdown_headers,
-        enrich_chunk_with_summary,
-        add_metadata_context
-    )
-    TEXT_PROCESSING_AVAILABLE = True
-except ImportError:
-    TEXT_PROCESSING_AVAILABLE = False
-    print("[WARN] text_processing module not found. Advanced features disabled.")
+
+from text_processing import (
+    clean_text,
+    semantic_chunking,
+    chunk_by_markdown_headers,
+    add_metadata_context
+)
+
 
 class DataProcessor:
     def __init__(self, llm_client: LLMClient):
@@ -26,9 +20,7 @@ class DataProcessor:
 
     def clean_text(self, text: str) -> str:
         """Use LLM to clean text (fix typos, formatting, OCR errors)."""
-        if TEXT_PROCESSING_AVAILABLE:
-            # Use heuristic cleaning first to save tokens
-            text = clean_text(text)
+        text = clean_text(text)
             
         prompt = f"""Please clean the following text. Fix typos, broken lines, and formatting issues. 
         Do not summarize or change the meaning. Return ONLY the cleaned text.
@@ -50,25 +42,6 @@ class DataProcessor:
         keywords = [k.strip() for k in response.split(',') if k.strip()]
         return keywords
 
-    def generate_qa_pairs(self, text: str, num_pairs: int = 3) -> List[Dict[str, str]]:
-        """Generate Q&A pairs for the text."""
-        prompt = f"""Generate {num_pairs} question-answer pairs based on the following text.
-        Format the output as a JSON list of objects with 'question' and 'answer' keys.
-        
-        Text:
-        {text}
-        """
-        response = self.llm.generate(prompt, system_prompt="You are a helpful assistant that generates Q&A pairs.")
-        try:
-            start = response.find('[')
-            end = response.rfind(']') + 1
-            if start != -1 and end != -1:
-                return json.loads(response[start:end])
-            return []
-        except:
-            print(f"[WARN] Failed to parse Q&A JSON: {response[:100]}...")
-            return []
-
     def generate_summary(self, text: str) -> str:
         """Generate a concise summary."""
         prompt = f"""Summarize the following text in 3-5 sentences.
@@ -82,11 +55,6 @@ class DataProcessor:
         """
         Adaptive chunking based on document source.
         """
-        if not TEXT_PROCESSING_AVAILABLE:
-            # Fallback to simple chunking
-            return [{'text': text[i:i+max_chunk_size], 'chunk_id': i//max_chunk_size} 
-                    for i in range(0, len(text), max_chunk_size)]
-
         source = meta.get('source', '')
         
         if source == 'github' or 'README' in meta.get('title', ''):
@@ -98,25 +66,6 @@ class DataProcessor:
             # Default semantic
             return semantic_chunking(text, max_chunk_size=max_chunk_size)
 
-    def filter_quality(self, text: str, meta: Dict[str, Any]) -> bool:
-        """
-        Filter low quality documents.
-        """
-        if not TEXT_PROCESSING_AVAILABLE:
-            return True
-            
-        scores = calculate_text_quality_score(text)
-        
-        # Specific rules
-        if meta.get('source') == 'github':
-            # GitHub READMEs shouldn't be just code
-            if scores['code_ratio'] > 0.8:
-                return False
-                
-        if scores['overall_score'] < 0.3:
-            return False
-            
-        return True
 
 import concurrent.futures
 
@@ -125,31 +74,25 @@ def process_single_document(
     meta: Dict[str, Any], 
     processor: DataProcessor, 
     enable_cleaning: bool, 
-    enable_qa: bool, 
     enable_summary: bool, 
     chunk_size: int
 ) -> List[Dict[str, Any]]:
     """Helper function to process a single document."""
     try:
-        # Quality Filter
-        if not processor.filter_quality(text, meta):
-            return []
             
         # Cleaning
         if enable_cleaning:
-            if TEXT_PROCESSING_AVAILABLE:
-                text = clean_text(text)
-            # text = processor.clean_text(text) 
+            text = clean_text(text)
         
-        # Augmentation - Keywords
-        if True:
-             meta['keywords'] = processor.extract_keywords(text)
+        # Extract keywords and summary (LLM-generated)
+        generated = {}
+        generated['keywords'] = processor.extract_keywords(text)
              
         # Augmentation - Summary
         doc_summary = ""
         if enable_summary:
             doc_summary = processor.generate_summary(text)
-            meta['summary'] = doc_summary
+            generated['summary'] = doc_summary
 
         # Chunking
         if chunk_size <= 0: # Disable chunking
@@ -161,23 +104,19 @@ def process_single_document(
         for chunk in chunks:
             chunk_text = chunk['text']
             
-            # Enrich chunk
-            if TEXT_PROCESSING_AVAILABLE:
-                if doc_summary:
-                    chunk_text = enrich_chunk_with_summary(chunk_text, doc_summary)
-                chunk_text = add_metadata_context(chunk_text, meta)
+            # Enrich content with metadata and summary for retrieval
+            # Metadata is added before summary as per text_processing.py implementation
+            enriched_content = add_metadata_context(chunk_text, meta, generated)
             
             chunk_doc = {
-                'content': chunk_text,
-                'metadata': meta,
+                'content': enriched_content,
+                'raw_content': chunk_text,
+                'generated': generated,
                 'chunk_id': chunk['chunk_id'],
-                'chunk_type': chunk.get('type', 'unknown')
+                'chunk_type': chunk.get('type', 'unknown'),
+                'metadata': meta
             }
             
-            # QA Generation
-            if enable_qa:
-                chunk_doc['qa_pairs'] = processor.generate_qa_pairs(chunk_text)
-                
             processed_chunks.append(chunk_doc)
             
         return processed_chunks
@@ -193,7 +132,6 @@ def process_source_directory(
     root_dir: str,
     output_file: str,
     enable_cleaning: bool = False,
-    enable_qa: bool = False,
     enable_summary: bool = False,
     chunk_size: int = 1000,
     max_workers: int = 5,
@@ -229,8 +167,12 @@ def process_source_directory(
                 text = doc.get('abstract', '') + "\n" + doc.get('title', '') # Combine for context
                 meta = doc
                 meta['source'] = 'arxiv'
-                # Arxiv jsonl doesn't have file paths per doc usually, but if it did:
-                # meta['path'] = ... 
+                # Ensure path exists for retrieval verification
+                if 'id' in doc:
+                    meta['path'] = f"arxiv/{doc['id']}"
+                    meta['arxiv_id'] = doc['id']
+                else:
+                    meta['path'] = "arxiv/unknown"
                 all_docs.append((text, meta))
     
     # 2. Process GitHub
@@ -274,7 +216,15 @@ def process_source_directory(
                 rel_path = str(p.relative_to(project_root))
             except ValueError:
                 rel_path = str(p)
-            meta = {'source': 'hf_model_card', 'title': p.stem, 'path': rel_path}
+            
+            # Parse model_id from filename (owner__repo -> owner/repo)
+            model_id = p.stem.replace('__', '/')
+            meta = {
+                'source': 'hf_models', 
+                'title': p.stem, 
+                'path': rel_path,
+                'model_id': model_id
+            }
             all_docs.append((text, meta))
         # Datasets
         for f in glob.glob(str(hf_dir / "datasets" / "*.md")):
@@ -285,7 +235,15 @@ def process_source_directory(
                 rel_path = str(p.relative_to(project_root))
             except ValueError:
                 rel_path = str(p)
-            meta = {'source': 'hf_dataset_card', 'title': p.stem, 'path': rel_path}
+            
+            # Parse dataset_id from filename (owner__repo -> owner/repo)
+            dataset_id = p.stem.replace('__', '/')
+            meta = {
+                'source': 'hf_datasets', 
+                'title': p.stem, 
+                'path': rel_path,
+                'dataset_id': dataset_id
+            }
             all_docs.append((text, meta))
 
     print(f"[INFO] Total documents found: {len(all_docs)}")
@@ -331,7 +289,7 @@ def process_source_directory(
         future_to_doc = {
             executor.submit(
                 process_single_document, 
-                text, meta, processor, enable_cleaning, enable_qa, enable_summary, chunk_size
+                text, meta, processor, enable_cleaning, enable_summary, chunk_size
             ): (text, meta) for text, meta in docs_to_process
         }
         
@@ -374,9 +332,8 @@ if __name__ == "__main__":
     parser.add_argument("--data-root", required=True, help="Root directory containing data folders")
     parser.add_argument("--output", required=True, help="Output JSONL file")
     parser.add_argument("--clean", action="store_true", help="Enable text cleaning")
-    parser.add_argument("--qa", action="store_true", help="Enable Q&A")
     parser.add_argument("--summary", action="store_true", help="Enable summarization")
-    parser.add_argument("--chunk-size", type=int, default=1000, help="Chunk size")
+    parser.add_argument("--chunk-size", type=int, default=10000, help="Chunk size")
     parser.add_argument("--workers", type=int, default=1, help="Number of parallel workers")
     parser.add_argument("--batch-size", type=int, default=50, help="Save batch size")
     parser.add_argument("--no-chunk", action="store_true", help="Disable chunking (treat full doc as one chunk)")
@@ -389,7 +346,6 @@ if __name__ == "__main__":
         args.data_root, 
         args.output, 
         enable_cleaning=args.clean,
-        enable_qa=args.qa,
         enable_summary=args.summary,
         chunk_size=final_chunk_size,
         max_workers=args.workers,

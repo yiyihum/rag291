@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-文本处理增强模块
-包含文档摘要、清洗、结构化、质量过滤等功能
+Text Processing Enhancement Module
+Contains functions for document summarization, cleaning, structuring, and quality filtering.
 """
 import re
 from typing import List, Dict, Any, Optional, Tuple
@@ -9,63 +9,42 @@ from pathlib import Path
 import numpy as np
 
 
-# ==================== 文本清洗 ====================
+# ==================== Text Cleaning ====================
 
 def clean_text(text: str) -> str:
     """
-    基础文本清洗
-    - 移除多余空白
-    - 统一换行符
-    - 移除特殊控制字符
+    Basic text cleaning
+    - Remove excess whitespace
+    - Unify newlines
+    - Remove special control characters
     """
     if not text:
         return ""
     
-    # 移除控制字符 (保留换行、制表符)
+    # Remove control characters (keep newlines, tabs)
     text = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', text)
     
-    # 统一换行符
+    # Unify newlines
     text = text.replace('\r\n', '\n').replace('\r', '\n')
     
-    # 移除行尾空白
+    # Remove trailing whitespace
     text = '\n'.join(line.rstrip() for line in text.split('\n'))
     
-    # 压缩多个空行为最多2个
+    # Compress multiple empty lines to max 2
     text = re.sub(r'\n{4,}', '\n\n\n', text)
     
-    # 移除行内多余空格
+    # Remove excess inline whitespace
     text = re.sub(r'[ \t]+', ' ', text)
     
     return text.strip()
 
 
-def remove_urls(text: str, replace_with: str = "[URL]") -> str:
-    """移除或替换 URL"""
-    url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
-    return re.sub(url_pattern, replace_with, text)
-
-
-def remove_emails(text: str, replace_with: str = "[EMAIL]") -> str:
-    """移除或替换邮箱地址"""
-    email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    return re.sub(email_pattern, replace_with, text)
-
-
-def normalize_whitespace(text: str) -> str:
-    """标准化空白字符"""
-    # 将多个空格压缩为一个
-    text = re.sub(r' +', ' ', text)
-    # 将多个换行压缩为最多2个
-    text = re.sub(r'\n{3,}', '\n\n', text)
-    return text.strip()
-
-
-# ==================== 文档质量评估 ====================
+# ==================== Document Quality Assessment ====================
 
 def calculate_text_quality_score(text: str) -> Dict[str, float]:
     """
-    计算文本质量分数
-    返回多个维度的质量指标
+    Calculate text quality score
+    Returns quality metrics across multiple dimensions
     """
     if not text or len(text) < 50:
         return {
@@ -78,7 +57,7 @@ def calculate_text_quality_score(text: str) -> Dict[str, float]:
     
     words = text.split()
     
-    # 1. 长度评分 (200-2000 词为最佳)
+    # 1. Length score (200-2000 words is optimal)
     word_count = len(words)
     if word_count < 50:
         length_score = word_count / 50
@@ -89,11 +68,11 @@ def calculate_text_quality_score(text: str) -> Dict[str, float]:
     else:
         length_score = max(0.5, 1.0 - (word_count - 2000) / 10000)
     
-    # 2. 词汇多样性 (unique words / total words)
+    # 2. Vocabulary diversity (unique words / total words)
     unique_words = len(set(w.lower() for w in words))
     diversity_score = min(1.0, unique_words / max(1, word_count) * 2)
     
-    # 3. 可读性 (平均句子长度，10-25词为佳)
+    # 3. Readability (average sentence length, 10-25 words is optimal)
     sentences = re.split(r'[.!?]+', text)
     sentences = [s.strip() for s in sentences if s.strip()]
     if sentences:
@@ -107,16 +86,16 @@ def calculate_text_quality_score(text: str) -> Dict[str, float]:
     else:
         readability_score = 0.0
     
-    # 4. 代码比例 (检测代码块)
+    # 4. Code ratio (detect code blocks)
     code_indicators = len(re.findall(r'```|def |class |import |function\(|var |const ', text))
     code_ratio = min(1.0, code_indicators / max(1, len(sentences)))
     
-    # 综合评分 (可根据需求调整权重)
+    # Overall score (weights can be adjusted as needed)
     overall_score = (
         length_score * 0.2 +
         diversity_score * 0.3 +
         readability_score * 0.3 +
-        (1 - code_ratio * 0.5) * 0.2  # 过多代码降低分数
+        (1 - code_ratio * 0.5) * 0.2  # Excessive code lowers score
     )
     
     return {
@@ -131,7 +110,7 @@ def calculate_text_quality_score(text: str) -> Dict[str, float]:
 def filter_low_quality_docs(docs: List[Tuple[str, Dict]], 
                            min_score: float = 0.3) -> List[Tuple[str, Dict]]:
     """
-    过滤低质量文档
+    Filter low quality documents
     docs: [(text, metadata), ...]
     """
     filtered = []
@@ -143,23 +122,13 @@ def filter_low_quality_docs(docs: List[Tuple[str, Dict]],
     return filtered
 
 
-# ==================== 文档摘要生成 ====================
-
-def extract_first_sentences(text: str, num_sentences: int = 3) -> str:
-    """
-    提取文档前 N 句作为简单摘要
-    """
-    sentences = re.split(r'[.!?]+\s+', text)
-    sentences = [s.strip() for s in sentences if s.strip()]
-    summary_sentences = sentences[:num_sentences]
-    return '. '.join(summary_sentences) + '.' if summary_sentences else text[:200]
-
+# ==================== Document Summary Generation ====================
 
 def extract_keywords(text: str, top_k: int = 10) -> List[str]:
     """
-    简单的关键词提取 (基于词频)
+    Simple keyword extraction (frequency-based)
     """
-    # 移除停用词 (简化版)
+    # Remove stopwords (simplified)
     stopwords = set([
         'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
         'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were', 'be', 'been',
@@ -167,24 +136,24 @@ def extract_keywords(text: str, top_k: int = 10) -> List[str]:
         'can', 'could', 'may', 'might', 'must', 'this', 'that', 'these', 'those'
     ])
     
-    # 提取单词
+    # Extract words
     words = re.findall(r'\b[a-z]{3,}\b', text.lower())
     
-    # 过滤停用词并统计频率
+    # Filter stopwords and count frequency
     word_freq = {}
     for word in words:
         if word not in stopwords and len(word) > 2:
             word_freq[word] = word_freq.get(word, 0) + 1
     
-    # 排序并返回 top-k
+    # Sort and return top-k
     sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
     return [word for word, freq in sorted_words[:top_k]]
 
 
 def generate_extractive_summary(text: str, max_sentences: int = 5) -> str:
     """
-    生成抽取式摘要
-    基于句子重要性评分 (简化的 TextRank 思想)
+    Generate extractive summary
+    Based on sentence importance score (simplified TextRank idea)
     """
     sentences = re.split(r'[.!?]+', text)
     sentences = [s.strip() for s in sentences if s.strip() and len(s.split()) > 5]
@@ -192,7 +161,7 @@ def generate_extractive_summary(text: str, max_sentences: int = 5) -> str:
     if len(sentences) <= max_sentences:
         return text[:500]
     
-    # 计算句子重要性 (基于词频和位置)
+    # Calculate sentence importance (based on word frequency and position)
     word_freq = {}
     for sent in sentences:
         words = sent.lower().split()
@@ -200,17 +169,17 @@ def generate_extractive_summary(text: str, max_sentences: int = 5) -> str:
             if len(word) > 3:
                 word_freq[word] = word_freq.get(word, 0) + 1
     
-    # 计算句子分数
+    # Calculate sentence scores
     sentence_scores = []
     for idx, sent in enumerate(sentences):
         words = sent.lower().split()
         score = sum(word_freq.get(w, 0) for w in words if len(w) > 3)
-        # 前面的句子加权
+        # Weight earlier sentences higher
         position_weight = 1.5 if idx < 3 else 1.0
         score *= position_weight
         sentence_scores.append((score, idx, sent))
     
-    # 选择得分最高的句子
+    # Select top scoring sentences
     sentence_scores.sort(reverse=True)
     top_sentences = sorted(sentence_scores[:max_sentences], key=lambda x: x[1])
     
@@ -218,12 +187,12 @@ def generate_extractive_summary(text: str, max_sentences: int = 5) -> str:
     return summary + '.'
 
 
-# ==================== 结构化信息提取 ====================
+# ==================== Structured Information Extraction ====================
 
 def extract_markdown_structure(text: str) -> Dict[str, Any]:
     """
-    提取 Markdown 文档结构
-    返回标题层级、章节内容等
+    Extract Markdown document structure
+    Returns heading levels, section content, etc.
     """
     lines = text.split('\n')
     structure = {
@@ -239,7 +208,7 @@ def extract_markdown_structure(text: str) -> Dict[str, Any]:
     code_content = []
     
     for line in lines:
-        # 检测代码块
+        # Detect code blocks
         if line.strip().startswith('```'):
             if in_code_block:
                 structure['code_blocks'].append('\n'.join(code_content))
@@ -251,7 +220,7 @@ def extract_markdown_structure(text: str) -> Dict[str, Any]:
             code_content.append(line)
             continue
         
-        # 检测标题
+        # Detect headings
         heading_match = re.match(r'^(#{1,6})\s+(.+)$', line)
         if heading_match:
             level = len(heading_match.group(1))
@@ -268,60 +237,38 @@ def extract_markdown_structure(text: str) -> Dict[str, Any]:
             structure['sections'].append(current_section)
             continue
         
-        # 收集内容
+        # Collect content
         if current_section is not None:
             current_section['content'].append(line)
         
-        # 提取链接
+        # Extract links
         links = re.findall(r'\[([^\]]+)\]\(([^\)]+)\)', line)
         structure['links'].extend(links)
         
-        # 提取图片
+        # Extract images
         images = re.findall(r'!\[([^\]]*)\]\(([^\)]+)\)', line)
         structure['images'].extend(images)
     
-    # 将内容列表转为字符串
+    # Convert content list to string
     for section in structure['sections']:
         section['content'] = '\n'.join(section['content']).strip()
     
     return structure
 
 
-def extract_arxiv_abstract(text: str) -> Optional[str]:
-    """
-    从 arXiv 论文文本中提取摘要
-    """
-    # 尝试多种模式
-    patterns = [
-        r'(?i)abstract[:\s]+(.*?)(?=\n\n(?:introduction|keywords|1\.|$))',
-        r'(?i)abstract[:\s]+(.*?)(?=\nintroduction)',
-    ]
-    
-    for pattern in patterns:
-        match = re.search(pattern, text, re.DOTALL)
-        if match:
-            abstract = match.group(1).strip()
-            # 清理摘要
-            abstract = re.sub(r'\s+', ' ', abstract)
-            if 50 < len(abstract) < 2000:
-                return abstract
-    
-    return None
-
-
-# ==================== 智能分块增强 ====================
+# ==================== Intelligent Chunking Enhancement ====================
 
 def semantic_chunking(text: str, 
                      max_chunk_size: int = 800,
                      min_chunk_size: int = 100,
                      overlap: int = 50) -> List[Dict[str, Any]]:
     """
-    基于语义边界的智能分块
-    优先在段落、句子边界切分
+    Intelligent chunking based on semantic boundaries
+    Prioritizes splitting at paragraph and sentence boundaries
     """
     chunks = []
     
-    # 1. 首先按段落分割
+    # 1. First split by paragraphs
     paragraphs = text.split('\n\n')
     paragraphs = [p.strip() for p in paragraphs if p.strip()]
     
@@ -332,9 +279,9 @@ def semantic_chunking(text: str,
     for para_idx, para in enumerate(paragraphs):
         para_size = len(para)
         
-        # 如果单个段落就超过最大尺寸，需要按句子切分
+        # If a single paragraph exceeds max size, split by sentences
         if para_size > max_chunk_size:
-            # 保存当前块
+            # Save current chunk
             if current_chunk:
                 chunk_text = '\n\n'.join(current_chunk)
                 chunks.append({
@@ -347,7 +294,7 @@ def semantic_chunking(text: str,
                 current_chunk = []
                 current_size = 0
             
-            # 切分大段落
+            # Split large paragraph
             sentences = re.split(r'([.!?]+\s+)', para)
             sub_chunk = []
             sub_size = 0
@@ -365,7 +312,7 @@ def semantic_chunking(text: str,
                         'type': 'sentence_based'
                     })
                     chunk_id += 1
-                    # 保留重叠
+                    # Keep overlap
                     if overlap > 0 and len(sub_chunk) > 1:
                         sub_chunk = sub_chunk[-1:]
                         sub_size = len(sub_chunk[0])
@@ -387,7 +334,7 @@ def semantic_chunking(text: str,
             
             continue
         
-        # 检查是否需要创建新块
+        # Check if new chunk is needed
         if current_size + para_size > max_chunk_size and current_chunk:
             chunk_text = '\n\n'.join(current_chunk)
             chunks.append({
@@ -398,7 +345,7 @@ def semantic_chunking(text: str,
             })
             chunk_id += 1
             
-            # 添加重叠
+            # Add overlap
             if overlap > 0 and len(current_chunk) > 1:
                 current_chunk = [current_chunk[-1]]
                 current_size = len(current_chunk[0])
@@ -409,7 +356,7 @@ def semantic_chunking(text: str,
         current_chunk.append(para)
         current_size += para_size + 2  # +2 for '\n\n'
     
-    # 保存最后一个块
+    # Save last chunk
     if current_chunk:
         chunk_text = '\n\n'.join(current_chunk)
         if len(chunk_text) >= min_chunk_size:
@@ -425,8 +372,8 @@ def semantic_chunking(text: str,
 
 def chunk_by_markdown_headers(text: str, max_chunk_size: int = 1000) -> List[Dict[str, Any]]:
     """
-    按 Markdown 标题层级切分文档
-    每个 section 作为独立块
+    Split document by Markdown heading levels
+    Each section as an independent chunk
     """
     structure = extract_markdown_structure(text)
     chunks = []
@@ -434,7 +381,7 @@ def chunk_by_markdown_headers(text: str, max_chunk_size: int = 1000) -> List[Dic
     for idx, section in enumerate(structure['sections']):
         section_text = f"# {section['title']}\n\n{section['content']}"
         
-        # 如果 section 太大，进一步切分
+        # If section is too large, split further
         if len(section_text) > max_chunk_size:
             sub_chunks = semantic_chunking(section['content'], max_chunk_size)
             for sub_idx, sub_chunk in enumerate(sub_chunks):
@@ -459,20 +406,21 @@ def chunk_by_markdown_headers(text: str, max_chunk_size: int = 1000) -> List[Dic
     return chunks
 
 
-# ==================== 文档增强 ====================
+# ==================== Document Enhancement ====================
 
 def enrich_chunk_with_summary(chunk_text: str, doc_summary: str = "") -> str:
     """
-    为 chunk 添加文档级摘要作为上下文
+    Add document-level summary to chunk as context
     """
     if doc_summary:
         return f"[Document Summary: {doc_summary}]\n\n{chunk_text}"
     return chunk_text
 
 
-def add_metadata_context(chunk_text: str, metadata: Dict[str, Any]) -> str:
+def add_metadata_context(chunk_text: str, metadata: Dict[str, Any], generated: Optional[Dict[str, Any]] = None) -> str:
     """
-    将元数据信息添加到 chunk 文本中，帮助检索
+    Add metadata information to chunk text to help retrieval
+    If generated dictionary is provided, also add LLM generated summary and keywords
     """
     context_parts = []
     
@@ -491,11 +439,44 @@ def add_metadata_context(chunk_text: str, metadata: Dict[str, Any]) -> str:
     if metadata.get('primary_category'):
         context_parts.append(f"Category: {metadata['primary_category']}")
     
+    # Add specific IDs if available
+    if metadata.get('arxiv_id'):
+        context_parts.append(f"Arxiv ID: {metadata['arxiv_id']}")
+    if metadata.get('model_id'):
+        context_parts.append(f"Model ID: {metadata['model_id']}")
+    if metadata.get('dataset_id'):
+        context_parts.append(f"Dataset ID: {metadata['dataset_id']}")
+    if metadata.get('repo'):
+        context_parts.append(f"Repo: {metadata['repo']}")
+    
+    # Build base context
+    full_text = chunk_text
     if context_parts:
         context = ' | '.join(context_parts)
-        return f"[{context}]\n\n{chunk_text}"
+        full_text = f"[{context}]\n\n{full_text}"
     
-    return chunk_text
+    # If generated summary and keywords exist, add to document header
+    if generated:
+        generated_parts = []
+        
+        if generated.get('summary'):
+            generated_parts.append(f"[Document Summary: {generated['summary']}]")
+        
+        if generated.get('keywords'):
+            keywords = generated['keywords']
+            if isinstance(keywords, list):
+                keywords = ', '.join(keywords)
+            generated_parts.append(f"[Keywords: {keywords}]")
+        
+        if generated_parts:
+            generated_context = '\n\n'.join(generated_parts)
+            # Add generated content after base context
+            if context_parts:
+                full_text = f"[{context}]\n\n{generated_context}\n\n{chunk_text}"
+            else:
+                full_text = f"{generated_context}\n\n{chunk_text}"
+    
+    return full_text
 
 
 # ==================== 工具函数 ====================
