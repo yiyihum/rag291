@@ -8,7 +8,9 @@ The retrieve_enhanced methods produce JSONL outputs with structure:
     "qid": "Q1",
     "query": "...",
     "llm_response": "...",
-    "retrieve_results": [{"doc_id": "...", "chunk": "..."}, ...]
+    # "retrieve_results": [{"doc_id": "...", "chunk": "..."}, ...] # old
+    "retrieve_results": [{'score', 'content', 'metadata', 'raw_content'}, ...], for the metadata: {'source', 'title', 'path', 'id'}, and the id can be read as doc_id after the get_doc_id()
+
 }
 """
 
@@ -18,6 +20,7 @@ import json
 import csv
 import math
 from collections import defaultdict, OrderedDict
+from utils import get_doc_id
 
 
 def load_jsonl(file_path):
@@ -37,34 +40,34 @@ def write_csv(path, rows, fieldnames):
             writer.writerow({k: r.get(k, None) for k in fieldnames})
 
 
-def get_doc_id(obj: dict) -> str:
-    """Get doc_id from various possible fields in the object."""
-    candidates = [
-        "doc_id",
-        "dataset_id",
-        "model_id",
-        "arxiv_id",
-        "hf_id",
-        "repo",
-        "dataset_ids",
-    ]
+# def get_doc_id(obj: dict) -> str:
+#     """Get doc_id from various possible fields in the object."""
+#     candidates = [
+#         "doc_id",
+#         "dataset_id",
+#         "model_id",
+#         "arxiv_id",
+#         "hf_id",
+#         "repo",
+#         "dataset_ids",
+#     ]
     
-    for key in candidates:
-        if key not in obj:
-            continue
-        val = obj[key]
-        if val is None:
-            continue
+#     for key in candidates:
+#         if key not in obj:
+#             continue
+#         val = obj[key]
+#         if val is None:
+#             continue
         
-        if isinstance(val, (list, tuple)):
-            return val
+#         if isinstance(val, (list, tuple)):
+#             return val
         
-        if isinstance(val, str):
-            s = val.strip()
-            if s:
-                return s
+#         if isinstance(val, str):
+#             s = val.strip()
+#             if s:
+#                 return s
     
-    return ""
+#     return ""
 
 
 def normalize_doc_id(doc_id: str) -> str:
@@ -177,7 +180,10 @@ def load_enhanced_runs(responses_path: str):
         # Extract doc_ids in order (ranked by retrieval system)
         doc_entries = []
         for item in retrieve_results:
-            doc_id = item.get("doc_id", "")
+            # doc_id = item.get("doc_id", "")
+            metadata = item.get("metadata", "")
+            assert metadata, "No metadata loaded!"
+            doc_id = get_doc_id(metadata)
             if doc_id and doc_id != "unknown":
                 # Store tuple of (normalized_id, all_possible_ids)
                 possible_ids = extract_id_from_retrieved_doc(doc_id)

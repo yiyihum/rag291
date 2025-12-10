@@ -63,6 +63,13 @@ def get_doc_id(obj: dict) -> str:
         "repo",
         "dataset_ids",
     ]
+    if 'source' in obj:
+        if obj['source'] == 'github' and 'repo' in obj:
+            return obj['source'] + '|' + obj['repo']
+        elif obj['source'] == 'hf_datasets' and 'dataset_id' in obj:
+            return obj['source'] + '|' + obj['dataset_id']
+        elif obj['source'] == 'hf_models' and 'model_id' in obj:
+            return obj['source'] + '|' + obj['model_id']
 
     for key in candidates:
         if key not in obj:

@@ -16,7 +16,7 @@ fi
 METHOD=${1:-agent-multi}
 
 # Construct the responses file path
-RESPONSES_PATH="../responses_${METHOD}.jsonl"
+RESPONSES_PATH="../results_enhanced/responses_${METHOD}.jsonl"
 
 # Check if responses file exists
 if [ ! -f "$RESPONSES_PATH" ]; then
