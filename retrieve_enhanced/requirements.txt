@@ -1,6 +1,0 @@
-faiss-cpu
-sentence-transformers
-numpy
-tqdm
-sentencepiece
-openai
