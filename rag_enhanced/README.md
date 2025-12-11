@@ -121,7 +121,7 @@ To evaluate the system on the provided dataset:
 - `--input`: Path to the input `requests.jsonl` file containing queries.
 - `--output-dir`: Directory where the results will be saved. The filename is automatically generated based on the method and settings.
 - `--data-root`: Root directory containing the raw data folders (`arxiv`, `github_readmes`, `hf_cards`).
-- `--processed-file`: (Optional) Path to the pre-processed data file (e.g., `processed_data.jsonl`). Using this significantly speeds up initialization by skipping raw data loading and chunking.
+- `--processed-file`: (Optional) Path to the pre-processed data file (e.g., `processed_data_1000.jsonl`). Using this significantly speeds up initialization by skipping raw data loading and chunking.
 - `--embedding_type`: Retrieval embedding strategy.
     - `dense`: Uses semantic embeddings only.
     - `hybrid`: Combines dense embeddings with sparse (BM25/TF-IDF) keyword matching.
@@ -139,28 +139,28 @@ Here is a comprehensive list of commands to run all supported configurations.
 **Simple RAG**
 ```bash
 # Dense Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type dense --method simple
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type dense --method simple
 
 # Hybrid Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type hybrid --method simple
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type hybrid --method simple
 ```
 
 **Agent Single-turn**
 ```bash
 # Dense Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type dense --method agent-single
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type dense --method agent-single
 
 # Hybrid Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type hybrid --method agent-single
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type hybrid --method agent-single
 ```
 
 **Agent Multi-turn Loop**
 ```bash
 # Dense Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type dense --method agent-loop
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type dense --method agent-loop
 
 # Hybrid Embedding
-python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data.jsonl --embedding_type hybrid --method agent-loop
+python3 rag_enhanced/run_requests.py --input requests.jsonl --output-dir results_enhanced --data-root data --processed-file processed_data_1000.jsonl --embedding_type hybrid --method agent-loop
 ```
 
 ### Using Raw Data
