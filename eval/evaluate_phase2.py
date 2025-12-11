@@ -140,6 +140,7 @@ def load_qrels(path: str, key_name="rel"):
         qid = str(obj.get("qid", "")).strip()
         filters = obj.get("filters", {})
         doc_id = get_doc_id(filters)
+        print('query ids: ', doc_id)
         
         # Deal with list of doc_ids
         if isinstance(doc_id, list):
@@ -183,6 +184,7 @@ def load_enhanced_runs(responses_path: str):
             metadata = item.get("metadata", "")
             assert metadata, "No metadata loaded!"
             doc_id = get_doc_id(metadata)
+            print('runs_id: ', doc_id)
             if doc_id and doc_id != "unknown":
                 # Store tuple of (normalized_id, all_possible_ids)
                 # possible_ids = extract_id_from_retrieved_doc(doc_id)
@@ -194,33 +196,33 @@ def load_enhanced_runs(responses_path: str):
     return runs
 
 
-# def check_doc_match(doc_entry, qrels_for_q):
-#     """
-#     Check if a retrieved document matches any ground truth document.
+def check_doc_match(doc_entry, qrels_for_q):
+    """
+    Check if a retrieved document matches any ground truth document.
     
-#     Args:
-#         doc_entry: Tuple of (normalized_id, set of all_possible_ids)
-#         qrels_for_q: Dict of ground_truth_id -> relevance
+    Args:
+        doc_entry: Tuple of (normalized_id, set of all_possible_ids)
+        qrels_for_q: Dict of ground_truth_id -> relevance
     
-#     Returns:
-#         Relevance score if matched, 0 otherwise
-#     """
-#     normalized_id, possible_ids = doc_entry
+    Returns:
+        Relevance score if matched, 0 otherwise
+    """
+    normalized_id, possible_ids = doc_entry
     
-#     # Check if normalized form matches
-#     if normalized_id in qrels_for_q:
-#         return qrels_for_q[normalized_id]
+    # Check if normalized form matches
+    if normalized_id in qrels_for_q:
+        return qrels_for_q[normalized_id]
     
-#     # Check if any possible ID matches
-#     for pid in possible_ids:
-#         if pid in qrels_for_q:
-#             return qrels_for_q[pid]
-#         # Also try partial matching (e.g., 'org/repo' in 'org/repo/README.md')
-#         for gt_id in qrels_for_q.keys():
-#             if gt_id in pid or pid in gt_id:
-#                 return qrels_for_q[gt_id]
+    # Check if any possible ID matches
+    for pid in possible_ids:
+        if pid in qrels_for_q:
+            return qrels_for_q[pid]
+        # Also try partial matching (e.g., 'org/repo' in 'org/repo/README.md')
+        for gt_id in qrels_for_q.keys():
+            if gt_id in pid or pid in gt_id:
+                return qrels_for_q[gt_id]
     
-#     return 0
+    return 0
 
 
 # Evaluation metrics

@@ -1,1 +1,1 @@
-{'context_entity_recall': 0.2879, 'context_precision': 0.7160, 'context_recall': 0.8472, 'faithfulness': 0.9014, 'answer_correctness': 0.6632}
+{'context_entity_recall': 0.3300, 'context_precision': 0.7427, 'context_recall': 0.8472, 'faithfulness': 0.9181, 'answer_correctness': 0.6774}

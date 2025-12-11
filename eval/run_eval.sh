@@ -1,11 +1,11 @@
-run_name=faiss
+run_name=qdrant_chunk
 
-run_path="../results_baseline/retrieve_results/faiss/retrieval_results_faiss.json"
+# run_path="../results_baseline/retrieve_results/faiss/retrieval_results_faiss.json"
 # run_path="../results_baseline/retrieve_results/faiss_chunk/retrieval_results_chunk_faiss.json"
 # run_path="../results_baseline/retrieve_results/qdrant/retrieval_results_qdrant.json"
-# run_path="../results_baseline/retrieve_results/qdrant_chunk/retrieval_results_chunk_qdrant.json"
+run_path="../results_baseline/retrieve_results/qdrant_chunk/retrieval_results_chunk_qdrant.json"
 
-OUTPUT_PATH="eval_results_tmp"
+OUTPUT_PATH="eval_results_baseline"
 
 # evaluate based on doc_id
 # once for all subsets

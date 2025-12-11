@@ -88,36 +88,25 @@ def get_doc_id(obj: dict) -> str:
         "repo",
         "dataset_ids",
     ]
-    if 'source' in obj:
-        if obj['source'] == 'github' and 'repo' in obj:
-            return obj['source'] + '|' + obj['repo']
-        elif obj['source'] == 'hf_datasets' and 'dataset_id' in obj:
-            return obj['source'] + '|' + obj['dataset_id']
-        elif obj['source'] == 'hf_models' and 'model_id' in obj:
-            return obj['source'] + '|' + obj['model_id']
-
-    for key in candidates:
-        if key not in obj:
-            continue
-        val = obj[key]
-        if val is None:
-            continue
-
-        if isinstance(val, (list, tuple)):
-            # return first non-empty item
-            # for item in val:
-            #     if item not in (None, ""):
-            #         return str(item)
-            return val
-        
-        if isinstance(val, str):
-            s = val.strip()
-            if s:
-                return s
-            else:
-                continue
-
-    raise ValueError(f"Unknown doc_id field in objecy: {obj.keys()}")
+    # print(obj.keys())
+    if 'repo' in obj:
+        return 'github' + '|' + obj['repo']
+    elif 'dataset_id' in obj:
+        return 'hf_datasets' + '|' + obj['dataset_id']
+    elif 'model_id' in obj:
+        return 'hf_models' + '|' + obj['model_id']
+    elif 'dataset_ids' in obj:
+        return obj['dataset_ids']
+    elif 'id' in obj or 'arxiv_id' in obj:
+        id = obj['id'] if 'id' in obj else obj['arxiv_id']
+        return id
+    elif 'hf_id' in obj:
+        if obj['source'] == 'hf_model_card':
+            return 'hf_models' + '|' + obj['hf_id']
+        elif obj['source'] == 'hf_dataset_card':
+            return 'hf_datasets' + '|' + obj['hf_id']
+    else:
+        raise ValueError(f"Unknown doc_id field in objecy: {obj.keys()}")
 
 arxiv_corpus = load_jsonl("../data/arxiv_llm_2025/arxiv_llm_2025.jsonl")
 

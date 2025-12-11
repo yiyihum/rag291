@@ -29,7 +29,7 @@ METHOD=${1:-agent-multi}
 RESPONSES_PATH="../results_enhanced_p/responses_${METHOD}.jsonl"
 # RESPONSES_PATH="../results_baseline/retrieve_results/retrieval_results_${METHOD}.jsonl"
 
-OUTPUT_PATH="eval_results_tmp"
+OUTPUT_PATH="eval_results"
 
 # Check if responses file exists
 if [ ! -f "$RESPONSES_PATH" ]; then
@@ -57,11 +57,11 @@ python evaluate_phase2.py \
 # Phase 2b: RAGAS Evaluation
 # echo ""
 # echo ">>> Running RAGAS Evaluation..."
-# python evaluate_ragas_phase2.py \
-#     --run_name $METHOD \
-#     --responses_path $RESPONSES_PATH \
-#     --model_name gpt-4.1-mini \
-#     --out_dir $OUTPUT_PATH
+python evaluate_ragas_phase2.py \
+    --run_name $METHOD \
+    --responses_path $RESPONSES_PATH \
+    --model_name gpt-4.1-mini \
+    --out_dir $OUTPUT_PATH
 
 echo ""
 echo "=============================================="
