@@ -41,6 +41,8 @@ class RetrievalSystem:
         chunk_size: int = 1000,
         chunk_overlap: int = 200,
         hybrid_alpha: float = 0.5,
+        use_faiss: bool = False,
+        fusion_method: str = "weighted",  # "weighted" or "rrf"
     ):
         self.root = Path(root_dir)
         self.processed_file = Path(processed_file) if processed_file else None
@@ -48,6 +50,8 @@ class RetrievalSystem:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.hybrid_alpha = hybrid_alpha  # weight for dense vs tf-idf in hybrid
+        self.use_faiss = use_faiss
+        self.fusion_method = fusion_method
 
         # Storage
         self.texts: List[str] = []
@@ -56,6 +60,7 @@ class RetrievalSystem:
         # Dense
         self.model = None
         self.embeddings_dense: np.ndarray | None = None  # shape: (N, d_dense)
+        self.index_faiss = None
 
         # TF-IDF
         self.sp = None
@@ -79,7 +84,8 @@ class RetrievalSystem:
         s_min = scores.min()
         s_max = scores.max()
         if s_max <= s_min:
-            return np.zeros_like(scores)
+            # If all scores are the same (e.g. single result), return 1.0s
+            return np.ones_like(scores, dtype=np.float32)
         return (scores - s_min) / (s_max - s_min)
 
     # ---------- Index building (embeddings only, no FAISS) ----------
@@ -143,6 +149,18 @@ class RetrievalSystem:
             # cosine similarity via normalized vectors
             self.embeddings_dense = self._l2_normalize(xb_dense, axis=1)
 
+            if self.use_faiss:
+                try:
+                    import faiss
+                    print("[INFO] Building FAISS index...")
+                    d = self.embeddings_dense.shape[1]
+                    # Inner Product on normalized vectors = Cosine Similarity
+                    self.index_faiss = faiss.IndexFlatIP(d)
+                    self.index_faiss.add(self.embeddings_dense)
+                except ImportError:
+                    print("[WARN] FAISS not installed. Falling back to numpy.")
+                    self.use_faiss = False
+
         if need_tfidf:
             print("[INFO] Building TF-IDF embeddings...")
             self.sp = train_or_load_sp(
@@ -154,66 +172,74 @@ class RetrievalSystem:
             )
             pieces_list = [sp_encode(self.sp, t) for t in self.texts]
             xb_tfidf, self.vocab = build_tfidf(pieces_list)
-            # ensure numpy array
-            if hasattr(xb_tfidf, "toarray"):
-                xb_tfidf = xb_tfidf.toarray()
+            # Keep sparse for memory efficiency
             self.embeddings_tfidf = xb_tfidf.astype(np.float32)
 
         print("[INFO] Embeddings built successfully.")
 
     # ---------- Core retrieval mechanisms (self-implemented) ----------
 
-    def _search_dense(self, q_vec: np.ndarray, top_k: int) -> np.ndarray:
+    def _search_dense(self, q_vec: np.ndarray, top_k: int):
         """
         Dense vector search via cosine similarity:
             scores = q ⋅ x   (both normalized)
         q_vec: shape (d,)
-        returns: indices of top_k docs (sorted by score desc)
+        returns: indices of top_k docs, scores of top_k docs
         """
         if self.embeddings_dense is None:
-            return np.array([], dtype=int)
+            return np.array([], dtype=int), np.array([], dtype=np.float32)
 
         # ensure normalized
         q_vec = q_vec.astype(np.float32)
         q_vec = q_vec / (np.linalg.norm(q_vec) + 1e-9)
+
+        if self.use_faiss and self.index_faiss is not None:
+            # FAISS expects (n_queries, d)
+            D, I = self.index_faiss.search(q_vec.reshape(1, -1), top_k)
+            # D is scores (cosine), I is indices
+            # Filter out -1 indices (if k > N)
+            valid_mask = I[0] != -1
+            return I[0][valid_mask], D[0][valid_mask]
 
         # scores shape: (N,)
         scores = self.embeddings_dense @ q_vec  # cosine similarity
         # top_k indices
         k = min(top_k, scores.shape[0])
         if k <= 0:
-            return np.array([], dtype=int)
+            return np.array([], dtype=int), np.array([], dtype=np.float32)
         top_idx = np.argpartition(-scores, k - 1)[:k]
         # sort by score desc
         top_idx = top_idx[np.argsort(-scores[top_idx])]
-        return top_idx, scores
+        return top_idx, scores[top_idx]
 
-    def _search_tfidf(self, q_vec: np.ndarray, top_k: int) -> np.ndarray:
+    def _search_tfidf(self, q_vec: np.ndarray, top_k: int):
         """
         Sparse vector search (TF-IDF) via dot product:
             scores = q ⋅ x
         q_vec: shape (d,)
-        returns: indices of top_k docs (sorted by score desc)
+        returns: indices of top_k docs, scores of top_k docs
         """
         if self.embeddings_tfidf is None:
-            return np.array([], dtype=int)
+            return np.array([], dtype=int), np.array([], dtype=np.float32)
 
         q_vec = q_vec.astype(np.float32)
         scores = self.embeddings_tfidf @ q_vec  # shape: (N,)
         k = min(top_k, scores.shape[0])
         if k <= 0:
-            return np.array([], dtype=int)
+            return np.array([], dtype=int), np.array([], dtype=np.float32)
         top_idx = np.argpartition(-scores, k - 1)[:k]
         top_idx = top_idx[np.argsort(-scores[top_idx])]
-        return top_idx, scores
+        return top_idx, scores[top_idx]
 
     def _search_hybrid(self, q_dense: np.ndarray, q_tfidf: np.ndarray, top_k: int):
         """
         Hybrid retrieval:
             score = alpha * dense_score_norm + (1 - alpha) * tfidf_score_norm
         """
-        dense_idx, dense_scores = self._search_dense(q_dense, top_k=top_k * 5)
-        tfidf_idx, tfidf_scores = self._search_tfidf(q_tfidf, top_k=top_k * 5)
+        # Increase candidate pool for better recall
+        limit = max(top_k * 10, 100)
+        dense_idx, dense_scores = self._search_dense(q_dense, top_k=limit)
+        tfidf_idx, tfidf_scores = self._search_tfidf(q_tfidf, top_k=limit)
 
         # unify candidate set
         N = len(self.texts)
@@ -223,25 +249,71 @@ class RetrievalSystem:
         # normalize scores separately
         if dense_scores.size > 0:
             dense_norm = self._normalize_scores(dense_scores)
-            for idx in dense_idx:
-                final_scores[idx] += self.hybrid_alpha * dense_norm[idx]
-                used[idx] = True
+            for i, idx in enumerate(dense_idx):
+                if idx < N: # Safety check
+                    final_scores[idx] += self.hybrid_alpha * dense_norm[i]
+                    used[idx] = True
 
         if tfidf_scores.size > 0:
             tfidf_norm = self._normalize_scores(tfidf_scores)
-            for idx in tfidf_idx:
-                final_scores[idx] += (1.0 - self.hybrid_alpha) * tfidf_norm[idx]
-                used[idx] = True
+            for i, idx in enumerate(tfidf_idx):
+                if idx < N:
+                    final_scores[idx] += (1.0 - self.hybrid_alpha) * tfidf_norm[i]
+                    used[idx] = True
 
         cand_idx = np.where(used)[0]
         if cand_idx.size == 0:
-            return np.array([], dtype=int), final_scores
+            return np.array([], dtype=int), np.array([], dtype=np.float32)
 
         k = min(top_k, cand_idx.size)
-        top_cand = np.argpartition(-final_scores[cand_idx], k - 1)[:k]
+        # Extract scores for candidates
+        cand_scores = final_scores[cand_idx]
+        
+        top_cand = np.argpartition(-cand_scores, k - 1)[:k]
         top_idx = cand_idx[top_cand]
+        # Sort by final score
         top_idx = top_idx[np.argsort(-final_scores[top_idx])]
-        return top_idx, final_scores
+        
+        # Return indices and their scores
+        return top_idx, final_scores[top_idx]
+
+    def _search_hybrid_rrf(self, q_dense: np.ndarray, q_tfidf: np.ndarray, top_k: int, rrf_k: int = 60):
+        """
+        Reciprocal Rank Fusion (RRF).
+        score = 1 / (k + rank_dense) + 1 / (k + rank_tfidf)
+        """
+        # Retrieve more candidates for RRF to work well
+        limit = max(top_k * 10, 100)
+        
+        dense_idx, _ = self._search_dense(q_dense, top_k=limit)
+        tfidf_idx, _ = self._search_tfidf(q_tfidf, top_k=limit)
+        
+        # Compute RRF scores
+        from collections import defaultdict
+        rrf_scores = defaultdict(float)
+        
+        for rank, idx in enumerate(dense_idx):
+            rrf_scores[idx] += 1.0 / (rrf_k + rank + 1)
+            
+        for rank, idx in enumerate(tfidf_idx):
+            rrf_scores[idx] += 1.0 / (rrf_k + rank + 1)
+            
+        # Sort
+        cand_idx = np.array(list(rrf_scores.keys()))
+        cand_scores = np.array(list(rrf_scores.values()))
+        
+        if cand_idx.size == 0:
+             return np.array([], dtype=int), np.array([], dtype=np.float32)
+             
+        k_final = min(top_k, cand_idx.size)
+        top_partition = np.argpartition(-cand_scores, k_final - 1)[:k_final]
+        
+        final_idx = cand_idx[top_partition]
+        final_scores = cand_scores[top_partition]
+        
+        # Sort exact
+        sort_order = np.argsort(-final_scores)
+        return final_idx[sort_order], final_scores[sort_order]
 
     # ---------- Public API ----------
 
@@ -278,19 +350,22 @@ class RetrievalSystem:
         elif self.embedding_type == "tfidf":
             cand_idx, scores = self._search_tfidf(q_tfidf, top_k=top_k)
         else:  # "hybrid"
-            cand_idx, scores = self._search_hybrid(
-                q_dense, q_tfidf, top_k=top_k
-            )
+            if self.fusion_method == "rrf":
+                cand_idx, scores = self._search_hybrid_rrf(q_dense, q_tfidf, top_k=top_k)
+            else:
+                cand_idx, scores = self._search_hybrid(
+                    q_dense, q_tfidf, top_k=top_k
+                )
 
         hits: List[Dict[str, Any]] = []
         if cand_idx.size == 0:
             return hits
 
         # 3) Construct hits
-        for idx in cand_idx:
+        for i, idx in enumerate(cand_idx):
             meta = self.metas[idx]
             text = self.texts[idx]
-            score = float(scores[idx])
+            score = float(scores[i])
 
             # Resolve actual metadata dictionary
             # If loaded from processed_data.jsonl, meta is the full doc 'd', so real metadata is in d['metadata']
