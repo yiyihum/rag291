@@ -7,7 +7,7 @@ class LLMClient:
 
 class OpenRouterLLMClient(LLMClient):
     """Client for OpenRouter API."""
-    def __init__(self, api_key: str = None, model: str = "openai/gpt-4o-mini", base_url: str = "https://openrouter.ai/api/v1"):
+    def __init__(self, api_key: str = None, model: str = "openai/gpt-4o", base_url: str = "https://openrouter.ai/api/v1"):
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
         self.model = model
         self.base_url = base_url

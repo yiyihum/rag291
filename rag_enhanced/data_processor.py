@@ -333,7 +333,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True, help="Output JSONL file")
     parser.add_argument("--clean", action="store_true", help="Enable text cleaning")
     parser.add_argument("--summary", action="store_true", help="Enable summarization")
-    parser.add_argument("--chunk-size", type=int, default=10000, help="Chunk size")
+    parser.add_argument("--chunk-size", type=int, default=1000, help="Chunk size")
     parser.add_argument("--workers", type=int, default=1, help="Number of parallel workers")
     parser.add_argument("--batch-size", type=int, default=50, help="Save batch size")
     parser.add_argument("--no-chunk", action="store_true", help="Disable chunking (treat full doc as one chunk)")

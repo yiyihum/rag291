@@ -35,10 +35,10 @@ The `DataProcessor` class in `data_processor.py` has been refined to handle spec
 ```bash
 python3 rag_enhanced/data_processor.py \
   --data-root data \
-  --output processed_data.jsonl \
+  --output processed_data_1000.jsonl \
   --clean \
   --summary \
-  --chunk-size 10000 \
+  --chunk-size 1000 \
   --workers 10
 ```
 
