@@ -19,7 +19,7 @@ def process_requests(input_file: str, output_file: str, data_root: str, method: 
     
     # Initialize RAG System
     print("[INFO] Initializing RAG System...")
-    retriever = RetrievalSystem(data_root, processed_file=processed_file, embedding_type=embedding_type)
+    retriever = RetrievalSystem(data_root, processed_file=processed_file, embedding_type=embedding_type,chunk_size=10000)
     llm = get_llm_client() # Defaults to OpenRouter
     rag = RAGSystem(retriever, llm)
     

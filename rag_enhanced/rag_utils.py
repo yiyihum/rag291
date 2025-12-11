@@ -155,8 +155,8 @@ def load_hf_cards(root: Path):
     m_models = {row.get("id"): row for row in mani_models}
     m_dsets = {row.get("id"): row for row in mani_dsets}
     for sub, kind, manifest_map in [
-        (base / "models", "hf_model_card", m_models),
-        (base / "datasets", "hf_dataset_card", m_dsets),
+        (base / "models", "hf_models", m_models),
+        (base / "datasets", "hf_datasets", m_dsets),
     ]:
         if not sub.exists():
             continue
@@ -166,7 +166,12 @@ def load_hf_cards(root: Path):
             stem = p.stem
             hf_id = stem.replace("__", "/")
             txt = read_text_file(p)
-            meta = {"source": kind, "path": str(p), "title": p.name, "hf_id": hf_id}
+            if kind == "hf_models":
+                meta = {"source": kind, "path": str(p), "title": p.name, "model_id": hf_id}
+            elif kind == "hf_datasets":
+                meta = {"source": kind, "path": str(p), "title": p.name, "dataset_id": hf_id}
+            else:
+                raise ValueError(f"Unknown kind: {kind}")
             mani = manifest_map.get(hf_id)
             if mani:
                 meta.update({

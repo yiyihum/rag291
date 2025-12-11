@@ -33,13 +33,13 @@ The `DataProcessor` class in `data_processor.py` has been refined to handle spec
 
 **Command Line:**
 ```bash
-python3 retrieve_enhanced/data_processor.py \
+python3 rag_enhanced/data_processor.py \
   --data-root data \
   --output processed_data.jsonl \
   --clean \
   --summary \
-  --chunk-size 100000 \
-  --workers 5
+  --chunk-size 10000 \
+  --workers 10
 ```
 
 **Parameters Used:**
