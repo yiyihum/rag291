@@ -16,10 +16,10 @@ fi
 METHOD=${1:-agent-multi}
 
 # Construct the responses file path
-RESPONSES_PATH="../results_enhanced_p/responses_${METHOD}.jsonl"
+RESPONSES_PATH="../results_enhanced/responses_${METHOD}.jsonl"
 # RESPONSES_PATH="../results_baseline/retrieve_results/retrieval_results_${METHOD}.jsonl"
 
-OUTPUT_PATH="eval_results_previous"
+OUTPUT_PATH="eval_results"
 
 # Check if responses file exists
 if [ ! -f "$RESPONSES_PATH" ]; then
