@@ -2,10 +2,20 @@
 # Evaluation script for retrieve_enhanced methods
 # 
 # Usage examples:
-#   ./run_eval_phase2.sh simple
-#   ./run_eval_phase2.sh agent-single
-#   ./run_eval_phase2.sh agent-multi
-#   ./run_eval_phase2.sh agent-loop
+#   ./run_eval_phase2.sh simple_dense
+#   ./run_eval_phase2.sh simple_dense_processed
+#   ./run_eval_phase2.sh simple_hybrid
+#   ./run_eval_phase2.sh simple_hybrid_processed
+
+#   ./run_eval_phase2.sh agent-single_dense
+#   ./run_eval_phase2.sh agent-single_dense_processed
+#   ./run_eval_phase2.sh agent-single_hybrid
+#   ./run_eval_phase2.sh agent-single_hybrid_processed
+
+#   ./run_eval_phase2.sh agent-loop_dense
+#   ./run_eval_phase2.sh agent-loop_dense_processed
+#   ./run_eval_phase2.sh agent-loop_hybrid
+#   ./run_eval_phase2.sh agent-loop_hybrid_processed
 
 # Load environment variables from .env file if it exists
 if [ -f "../.env" ]; then
