@@ -10,7 +10,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.9166666667,
-    "answer_correctness":0.7553073545
+    "answer_correctness":0.7135682241
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -26,7 +26,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.4545454545,
-    "answer_correctness":0.2876455509
+    "answer_correctness":0.3622069544
   },
   {
     "user_input":"The PANDA paper introduces the first Chinese counterspeech dataset. What is the novel multi-step methodology, including specific algorithms and the final verification process, used to create this dataset?",
@@ -39,7 +39,7 @@
     "context_entity_recall":0.3749999995,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.7857142857,
+    "faithfulness":0.9166666667,
     "answer_correctness":0.7746533131
   },
   {
@@ -56,8 +56,8 @@
     "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":1.0,
-    "faithfulness":0.9473684211,
-    "answer_correctness":0.4857268339
+    "faithfulness":1.0,
+    "answer_correctness":0.8512030244
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -70,7 +70,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4920719561
+    "answer_correctness":0.5943446834
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -84,7 +84,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.5558888697
+    "answer_correctness":0.2171736403
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -97,7 +97,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.3511823514
+    "answer_correctness":0.3625459878
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -109,8 +109,8 @@
     "context_entity_recall":0.3333333328,
     "context_precision":0.9999999999,
     "context_recall":0.75,
-    "faithfulness":1.0,
-    "answer_correctness":0.2205758503
+    "faithfulness":0.9285714286,
+    "answer_correctness":0.2205817123
   },
   {
     "user_input":"I want to implement RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework. According to the documentation, what are the two specific command-line flags that enable and configure this feature?",
@@ -121,7 +121,7 @@
     ],
     "response":"The context explains that RL Dynamic Sampling from the DAPO paper can be enabled and configured in OpenRLHF using command-line flags. Specifically, it mentions two flags:\n\n- --dynamic_sampling_enable: This flag enables RL Dynamic Sampling.\n- --dynamic_sampling_alpha: This flag configures the degree or rate of dynamic sampling.\n\nAnswer: The two command-line flags are --dynamic_sampling_enable and --dynamic_sampling_alpha.",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.1999999996,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.5,
@@ -138,8 +138,8 @@
     "context_entity_recall":0.5999999988,
     "context_precision":1.0,
     "context_recall":1.0,
-    "faithfulness":0.8181818182,
-    "answer_correctness":0.3754996466
+    "faithfulness":0.9,
+    "answer_correctness":0.4397853608
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -150,7 +150,7 @@
     ],
     "response":"The context mentions that the Multimodal-Textbook dataset's images are provided in a tar archive (dataset_images_interval_7.tar.gz) and includes the recommended command for extraction. The procedure ensures all images are available in an accessible directory for further use.\n\nAnswer: The recommended code line is:\ntar -xzvf dataset_images_interval_7.tar.gz",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.1666666664,
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":1.0,
@@ -167,6 +167,6 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.8510965423
+    "answer_correctness":0.6010965423
   }
 ]

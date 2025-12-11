@@ -9,11 +9,11 @@
     ],
     "response":"The context describes a \"Multimodal Textbook\" dataset that contains 6.5 million keyframes extracted from instructional videos. It is associated with the repository for the paper [\"2.5 Years in Class: A Multimodal Textbook for Vision-Language Pretraining\"](https:\/\/arxiv.org\/abs\/2501.00958). The context lists the contact email \"ynpan24@m.fudan.edu.cn\" and mentions Fudan University, suggesting that this organization proposed the dataset.\n\nKey statistics for the dataset are as follows:\n- 6.5 million keyframes extracted from 75,000 English instructional videos.\n- 0.75 billion (750 million) text tokens (from ASR and OCR).\n- 610,000 interleaved samples, each with an average of 10.7 keyframes and 1,230 text tokens.\n\nAnswer: Fudan University proposed the dataset, which contains 6.5 million keyframes, 0.75 billion text tokens, and 610,000 interleaved samples.",
     "reference":"Primary evidence: The paper '2.5 Years in Class: A Multimodal Textbook for Vision-Language Pretraining' (arXiv:2501.00958) and the associated dataset card for DAMO-NLP-SG\/multimodal_textbook, which describe the dataset's origin from the DAMO-NLP-SG organization and its key statistics: 6.5M keyframes and 0.8B text tokens.Organization: DAMO-NLP-SG; Statistics: 0.8B text tokens, 610K samples.",
-    "context_entity_recall":0.2857142853,
+    "context_entity_recall":0.428571428,
     "context_precision":0.8333333333,
     "context_recall":1.0,
     "faithfulness":0.9090909091,
-    "answer_correctness":0.4483194227
+    "answer_correctness":0.3899860893
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -30,7 +30,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.0,
-    "answer_correctness":0.2086944439
+    "answer_correctness":0.4229801582
   },
   {
     "user_input":"The PANDA paper introduces the first Chinese counterspeech dataset. What is the novel multi-step methodology, including specific algorithms and the final verification process, used to create this dataset?",
@@ -62,8 +62,8 @@
     "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.6666666667,
-    "answer_correctness":0.506180731
+    "faithfulness":0.68,
+    "answer_correctness":0.4184791181
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -76,11 +76,11 @@
     ],
     "response":"The context states that TAPE (Contextualized Equivariant Positional Encoding) is introduced in the paper \"Rethinking Addressing in Language Models via Contextualized Equivariant Positional Encoding\" (ICML 2025) by Jiajun Zhu, Peihao Wang, Ruisi Cai, Jason D. Lee, Pan Li, and Zhangyang Wang. The official code implementation can be found at https:\/\/github.com\/VITA-Group\/TAPE.\n\nAnswer: The paper \"Rethinking Addressing in Language Models via Contextualized Equivariant Positional Encoding\" (ICML 2025) introduces TAPE, and the code implementation is available at https:\/\/github.com\/VITA-Group\/TAPE.",
     "reference":"Primary evidence: TAPE paper abstract and GitHub link https:\/\/github.com\/VITA-Group\/TAPE for the implementation.Paper: arXiv:2501.00712 (TAPE); Code: https:\/\/github.com\/VITA-Group\/TAPE.",
-    "context_entity_recall":0.4999999988,
+    "context_entity_recall":0.2499999994,
     "context_precision":0.7,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.3688802096
+    "answer_correctness":0.5521546067
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -94,7 +94,7 @@
     "reference":"Primary evidence: NVIDIA-Nemotron-Nano-9B-v2 model card describing hybrid Mamba-2\/MLP architecture with 4 attention layers and reasoning capabilities.Model: nvidia\/NVIDIA-Nemotron-Nano-9B-v2; Architecture: Mamba-2 + MLP + 4 Attention layers; Benchmarks (Reasoning-On): AIME25 72.1%, MATH500 97.8%, GPQA 64.0%, LCB 71.1%, IFEval 90.3%, HLE 6.5%, RULER(128K) 78.9%.",
     "context_entity_recall":0.2727272725,
     "context_precision":0.9999999999,
-    "context_recall":0.5,
+    "context_recall":0.6666666667,
     "faithfulness":1.0,
     "answer_correctness":0.489476342
   },
@@ -110,7 +110,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4754766643
+    "answer_correctness":0.6754766643
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -124,7 +124,7 @@
     "context_precision":0.9999999999,
     "context_recall":0.75,
     "faithfulness":1.0,
-    "answer_correctness":0.3291737005
+    "answer_correctness":0.4639570938
   },
   {
     "user_input":"I want to implement RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework. According to the documentation, what are the two specific command-line flags that enable and configure this feature?",
@@ -134,11 +134,11 @@
     ],
     "response":"The context mentions support for RL Dynamic Sampling from DAPO and lists two command-line flags related to this feature. The first flag, --dynamic_filtering, enables RL Dynamic Sampling. The second flag, --dynamic_filtering_reward_range, is used to configure the reward range for the dynamic filtering process.\n\nAnswer: --dynamic_filtering and --dynamic_filtering_reward_range",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":0.0,
+    "context_entity_recall":0.1999999996,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.7025353473
+    "answer_correctness":0.9837853473
   },
   {
     "user_input":"How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",

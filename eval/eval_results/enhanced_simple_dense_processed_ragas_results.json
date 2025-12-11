@@ -10,7 +10,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.6666666667,
-    "answer_correctness":0.7323055975
+    "answer_correctness":0.7059898081
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -24,7 +24,7 @@
     "context_entity_recall":0.0714285714,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.8571428571,
+    "faithfulness":1.0,
     "answer_correctness":0.3192020792
   },
   {
@@ -38,7 +38,7 @@
     "context_entity_recall":0.111111111,
     "context_precision":0.5,
     "context_recall":1.0,
-    "faithfulness":0.9,
+    "faithfulness":1.0,
     "answer_correctness":0.9081617012
   },
   {
@@ -48,11 +48,11 @@
     ],
     "response":"The context only provides detailed information about the Nemotron-Personas-Japan dataset and makes reference to its parent dataset, Nemotron-Personas. There is no explicit information in the provided context about the three NVIDIA persona datasets\u2019 names, their respective download counts, or direct comparative data regarding these statistics. The context does state that Nemotron-Personas-Japan is open-source under the CC BY 4.0 license and supports Japanese language use cases. It also mentions that the original Nemotron-Personas includes various attributes and appears to be available in another language (implicitly English). No licensing or language details are given for other NVIDIA persona datasets, nor are download counts specified for any.\n\nAnswer: The provided context does not contain download counts or a comparative ranking for the three NVIDIA persona datasets. However, Nemotron-Personas-Japan supports the Japanese language and is licensed under CC BY 4.0; licensing for other persona datasets is not specified in the context.",
     "reference":"Primary evidence: manifest entries for nvidia\/Nemotron-Personas, nvidia\/Nemotron-Personas-Japan, nvidia\/Nemotron-Personas-India with download counts and language tags.nvidia\/Nemotron-Personas; Licenses: CC-BY-4.0; Languages: en \/ ja \/ en+hi.",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.594935101
+    "answer_correctness":0.4155872749
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -65,7 +65,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4694591655
+    "answer_correctness":0.4502283962
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -78,7 +78,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.8,
-    "answer_correctness":0.2800381012
+    "answer_correctness":0.2827891307
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -114,7 +114,7 @@
     ],
     "response":"The context provided does not mention \"RL Dynamic Sampling from the DAPO paper\" or specify any command-line flags related to this feature. There is no reference in the documentation excerpts to DAPO, RL Dynamic Sampling, or related configuration flags.\n\nAnswer: The documentation does not specify any command-line flags for enabling or configuring RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework.",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.0,
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":0.0,
@@ -131,7 +131,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.6654298959
+    "answer_correctness":0.7601879604
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -153,10 +153,10 @@
     ],
     "response":"LangFair provides a range of metrics to assess bias and fairness in large language models, organized into specific categories to address different aspects of evaluation. Each category targets a particular risk or fairness concern, with representative metrics designed to capture these dimensions.\n\nAnswer: The main categories of bias and fairness metrics supported by LangFair are:\n\n- Counterfactual Fairness Metrics (e.g., Strict Counterfactual Sentiment Parity, Counterfactual Cosine Similarity Score)\n- Recommendation (Counterfactual) Fairness Metrics (e.g., Jaccard Similarity, Search Result Page Misinformation Score)\n- Stereotype Metrics (e.g., Stereotypical Associations, Co-occurrence Bias Score)",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.428571428,
+    "context_entity_recall":0.3333333328,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.875,
-    "answer_correctness":0.3070014955
+    "faithfulness":1.0,
+    "answer_correctness":0.5044604076
   }
 ]

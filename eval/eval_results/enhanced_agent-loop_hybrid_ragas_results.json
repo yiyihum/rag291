@@ -12,8 +12,8 @@
     "context_entity_recall":0.2857142853,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8,
-    "answer_correctness":0.4316139737
+    "faithfulness":0.8333333333,
+    "answer_correctness":0.3327128748
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -29,8 +29,8 @@
     "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.75,
-    "answer_correctness":0.3648429297
+    "faithfulness":0.8,
+    "answer_correctness":0.3648783201
   },
   {
     "user_input":"The PANDA paper introduces the first Chinese counterspeech dataset. What is the novel multi-step methodology, including specific algorithms and the final verification process, used to create this dataset?",
@@ -43,11 +43,11 @@
     ],
     "response":"The context explains the process used in the PANDA paper to create a Chinese counterspeech dataset. The methodology is described as multi-step and innovative, combining several techniques: using an LLM-as-a-Judge approach, leveraging simulated annealing, employing zero-shot counterspeech generation with LLMs, and applying a round-robin algorithm. After these automated or semi-automated steps, the data undergoes manual verification to ensure both quality and contextual relevance.\n\nAnswer: The novel multi-step methodology involves (1) using an LLM-as-a-Judge, (2) simulated annealing, (3) zero-shot counterspeech generation by LLMs, (4) a round-robin algorithm, and (5) final manual verification for quality and contextual relevance.",
     "reference":"Primary evidence: The PANDA paper abstract (2501.00697) describes a novel approach using an LLM-as-a-Judge, simulated annealing, zero-shot generation, and a round-robin algorithm, followed by manual verification for quality.The dataset was created using a novel approach that combines an LLM-as-a-Judge, simulated annealing, zero-shot Chinese counterspeech generation with LLMs, and a round-robin algorithm. This was followed by manual verification for quality and contextual relevance.",
-    "context_entity_recall":0.1249999998,
+    "context_entity_recall":0.111111111,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.9851828393
+    "answer_correctness":0.7508905199
   },
   {
     "user_input":"For the 3 NVIDIA persona datasets, which one has the highest download counts? And what are their language support and licensing details?",
@@ -62,9 +62,9 @@
     "reference":"Primary evidence: manifest entries for nvidia\/Nemotron-Personas, nvidia\/Nemotron-Personas-Japan, nvidia\/Nemotron-Personas-India with download counts and language tags.nvidia\/Nemotron-Personas; Licenses: CC-BY-4.0; Languages: en \/ ja \/ en+hi.",
     "context_entity_recall":0.0,
     "context_precision":0.0,
-    "context_recall":0.0,
+    "context_recall":1.0,
     "faithfulness":0.9411764706,
-    "answer_correctness":0.292928025
+    "answer_correctness":0.2929298234
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -80,7 +80,7 @@
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.5188307353
+    "answer_correctness":0.491558008
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -93,11 +93,11 @@
     ],
     "response":"The context explains that NVIDIA-Nemotron-Nano-9B-v2 is a 9B parameter model that uses a hybrid architecture of mainly Mamba-2 and MLP layers, with just four attention layers. The model is described as being particularly strong in reasoning, especially when its reasoning trace feature is enabled.\n\nAnswer: NVIDIA-Nemotron-Nano-9B-v2 uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance.",
     "reference":"Primary evidence: NVIDIA-Nemotron-Nano-9B-v2 model card describing hybrid Mamba-2\/MLP architecture with 4 attention layers and reasoning capabilities.Model: nvidia\/NVIDIA-Nemotron-Nano-9B-v2; Architecture: Mamba-2 + MLP + 4 Attention layers; Benchmarks (Reasoning-On): AIME25 72.1%, MATH500 97.8%, GPQA 64.0%, LCB 71.1%, IFEval 90.3%, HLE 6.5%, RULER(128K) 78.9%.",
-    "context_entity_recall":0.6363636358,
+    "context_entity_recall":0.545454545,
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.5781940514
+    "answer_correctness":0.6285893083
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -136,8 +136,8 @@
     ],
     "response":"To implement RL Dynamic Sampling from the DAPO paper within OpenRLHF, the framework provides specific command-line flags for this purpose. According to the documentation, you need to enable and configure this feature with two flags:\n\n- --dynamic_sample: This flag enables RL Dynamic Sampling.\n- --dynamic_temperature: This flag sets the temperature parameter for dynamic sampling.\n\nAnswer: --dynamic_sample and --dynamic_temperature",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":0.0,
-    "context_precision":0.9999999999,
+    "context_entity_recall":0.1999999996,
+    "context_precision":0.8333333333,
     "context_recall":1.0,
     "faithfulness":0.2,
     "answer_correctness":0.5001548928
@@ -150,11 +150,11 @@
     ],
     "response":"The Multimodal-Textbook dataset is structured by interleaving images and text entries that are closely aligned to provide coherent educational content. Specifically, images (keyframes) are extracted from instructional videos, while texts are transcribed from the audio (ASR) and sometimes supplemented with OCR. Within each sample, there is an alternating sequence in which image entries and text entries (including ASR and possible OCR text) occur, creating an image-text interleaved format that reflects the flow of information in the original video instruction.\n\nAnswer: The Multimodal-Textbook dataset alternates between keyframe images and transcribed texts (ASR\/OCR) from instructional videos, creating a sequence where images and text entries are interleaved to deliver coherent educational content.",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing JSON structure with alternating images\/null entries, ASR texts, and OCR enrichment.Interleaved OBELICS-style: images list with keyframes and None; texts list with ASR and None; text_ocr_list adds OCR.",
-    "context_entity_recall":0.5999999988,
+    "context_entity_recall":null,
     "context_precision":1.0,
     "context_recall":1.0,
-    "faithfulness":0.9230769231,
-    "answer_correctness":0.3652804355
+    "faithfulness":0.8461538462,
+    "answer_correctness":0.371773942
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -168,7 +168,7 @@
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":0.6,
-    "answer_correctness":0.3664549828
+    "answer_correctness":0.658662775
   },
   {
     "user_input":"What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
@@ -178,10 +178,10 @@
     ],
     "response":"LangFair provides tools to assess bias and fairness in large language models, grouping its supported metrics into several main categories. Each category targets different types of risks, with representative examples highlighting the kind of biases evaluated.\n\n- Toxicity Metrics: These metrics assess the extent to which model outputs are toxic or harmful. Examples include Expected Maximum Toxicity, Toxicity Probability, and Toxic Fraction.\n- Counterfactual Fairness Metrics: These metrics evaluate the consistency of model responses across variations of prompts differing only in protected attributes. Examples include Strict Counterfactual Sentiment Parity and Weak Counterfactual Sentiment Parity.\nAnswer: The main categories of bias and fairness metrics supported by LangFair are Toxicity Metrics (e.g., Expected Maximum Toxicity, Toxicity Probability, Toxic Fraction) and Counterfactual Fairness Metrics (e.g., Strict Counterfactual Sentiment Parity, Weak Counterfactual Sentiment Parity).",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.0,
+    "context_entity_recall":0.1428571427,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.9090909091,
-    "answer_correctness":0.5653324457
+    "answer_correctness":0.6618914213
   }
 ]

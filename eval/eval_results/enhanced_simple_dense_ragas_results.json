@@ -9,7 +9,7 @@
     ],
     "response":"The context describes a dataset proposed in the repository for \"2.5 Years in Class: A Multimodal Textbook for Vision-Language Pretraining,\" officially released by the DAMO-NLP-SG team (as shown in the Huggingface link: https:\/\/huggingface.co\/datasets\/DAMO-NLP-SG\/multimodal_textbook). Key statistics include 6.5 million keyframes, 0.75 billion text (ASR+OCR) tokens, and a total of 610,000 interleaved samples.\n\nAnswer: The dataset containing 6.5 million keyframes was proposed by the DAMO-NLP-SG team. Its key statistics are 0.75 billion text tokens and 610,000 interleaved samples.",
     "reference":"Primary evidence: The paper '2.5 Years in Class: A Multimodal Textbook for Vision-Language Pretraining' (arXiv:2501.00958) and the associated dataset card for DAMO-NLP-SG\/multimodal_textbook, which describe the dataset's origin from the DAMO-NLP-SG organization and its key statistics: 6.5M keyframes and 0.8B text tokens.Organization: DAMO-NLP-SG; Statistics: 0.8B text tokens, 610K samples.",
-    "context_entity_recall":0.2857142853,
+    "context_entity_recall":0.428571428,
     "context_precision":0.8333333333,
     "context_recall":1.0,
     "faithfulness":1.0,
@@ -26,10 +26,10 @@
     ],
     "response":"The context shows several safety-related datasets and their licenses. Among them, the dataset with the CC-BY-4.0 license, and \"redteaming, safety, jailbreak\" tags, is described as having each entry as a dictionary with the following fields: index, goal, and jailbreak prompt.\n\nAnswer: index, goal, jailbreak prompt",
     "reference":"Primary evidence: Pliny_HackAPrompt_Dataset card with license: cc-by-4.0 and tags including redteaming\/safety\/jailbreaks. The README file describes the fields: submission_id, session_id, challenge_slug, intent, model_id, passed, token_count, and messages.submission_id, session_id, challenge_slug, intent, model_id, passed, token_count, messages.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.5,
+    "faithfulness":0.6,
     "answer_correctness":0.3535732026
   },
   {
@@ -60,11 +60,11 @@
     ],
     "response":"The context does not directly list download counts for any of the NVIDIA persona datasets, so which one has the highest downloads cannot be determined from the provided information. However, I can summarize their language support and licensing:\n\n- All datasets are text modality and primarily aimed at persona descriptions.\n- At least one variation (\"nvidia\/Nemotron-Personas-India\", \"hi_Latn_IN\") supports Hindi in the Latin script; more general variants could include other languages, but explicit language coverage is not detailed for each dataset.\n- The Nemotron-Personas dataset is licensed under Creative Commons Attribution 4.0 International License (CC BY 4.0), allowing free use and adaptation with attribution.\n- For other datasets mentioned, the Nemotron pre-training data is under the NVIDIA Open Data License, which is also permissive for training, but each dataset\u2019s license should be checked for fitness to intended use.\n\nAnswer: The context does not specify download counts for the NVIDIA persona datasets, so it is not possible to determine which has the highest downloads. Their language support includes at least English and Hindi (Latin script), and the licensing is Creative Commons Attribution 4.0 (CC BY 4.0) for Nemotron-Personas, with other datasets under the permissive NVIDIA Open Data License.",
     "reference":"Primary evidence: manifest entries for nvidia\/Nemotron-Personas, nvidia\/Nemotron-Personas-Japan, nvidia\/Nemotron-Personas-India with download counts and language tags.nvidia\/Nemotron-Personas; Licenses: CC-BY-4.0; Languages: en \/ ja \/ en+hi.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":1.0,
-    "faithfulness":0.9411764706,
-    "answer_correctness":0.6909244869
+    "faithfulness":1.0,
+    "answer_correctness":0.3567100649
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -77,11 +77,11 @@
     ],
     "response":"The context explains that TAPE (Contextualized Equivariant Positional Encoding) is introduced in the paper \"Rethinking Addressing in Language Models via Contextualized Equivariant Positional Encoding\" (ICML 2025) by Jiajun Zhu, Peihao Wang, Ruisi Cai, Jason D. Lee, Pan Li, and Zhangyang Wang. The official code implementation is available at https:\/\/github.com\/VITA-Group\/TAPE.\n\nAnswer: The paper \"Rethinking Addressing in Language Models via Contextualized Equivariant Positional Encoding\" (ICML 2025) introduces TAPE, and the code implementation can be found at https:\/\/github.com\/VITA-Group\/TAPE.",
     "reference":"Primary evidence: TAPE paper abstract and GitHub link https:\/\/github.com\/VITA-Group\/TAPE for the implementation.Paper: arXiv:2501.00712 (TAPE); Code: https:\/\/github.com\/VITA-Group\/TAPE.",
-    "context_entity_recall":0.2499999994,
+    "context_entity_recall":0.4999999988,
     "context_precision":0.7,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4684017773
+    "answer_correctness":0.6799402388
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -95,8 +95,8 @@
     "reference":"Primary evidence: NVIDIA-Nemotron-Nano-9B-v2 model card describing hybrid Mamba-2\/MLP architecture with 4 attention layers and reasoning capabilities.Model: nvidia\/NVIDIA-Nemotron-Nano-9B-v2; Architecture: Mamba-2 + MLP + 4 Attention layers; Benchmarks (Reasoning-On): AIME25 72.1%, MATH500 97.8%, GPQA 64.0%, LCB 71.1%, IFEval 90.3%, HLE 6.5%, RULER(128K) 78.9%.",
     "context_entity_recall":0.2727272725,
     "context_precision":0.9999999999,
-    "context_recall":0.5,
-    "faithfulness":0.8,
+    "context_recall":0.6666666667,
+    "faithfulness":0.7,
     "answer_correctness":0.5283895764
   },
   {
@@ -135,7 +135,7 @@
     ],
     "response":"The context explains that RL Dynamic Sampling from the DAPO paper is supported in OpenRLHF and specifies that this feature can be enabled and configured using particular command-line flags. The two relevant flags mentioned are --dynamic_filtering and --dynamic_filtering_reward_range.\n\nAnswer: --dynamic_filtering and --dynamic_filtering_reward_range",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":0.0,
+    "context_entity_recall":0.1999999996,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
@@ -153,8 +153,8 @@
     "context_entity_recall":0.5999999988,
     "context_precision":1.0,
     "context_recall":1.0,
-    "faithfulness":0.8571428571,
-    "answer_correctness":0.569945925
+    "faithfulness":1.0,
+    "answer_correctness":0.3542131293
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -164,7 +164,7 @@
     ],
     "response":"To extract the Multimodal-Textbook dataset from the split tar parts, the recommended procedure is to first concatenate the split files and then extract the resulting tar.gz archive. The instructed code line to do this is:\n\nAnswer: \ncat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz && tar -xzvf dataset_images_interval_7.tar.gz",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.1666666664,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.6666666667,
@@ -177,10 +177,10 @@
     ],
     "response":"LangFair organizes its bias and fairness metrics into several main categories, with distinct metrics representing each category. The categories and representative examples for each are as follows:\n\n- Toxicity Metrics: These assess the degree of harmful or offensive language in LLM outputs. Examples include Expected Maximum Toxicity, Toxicity Probability, and Toxic Fraction.\n- Counterfactual Fairness Metrics: These evaluate whether changing protected attributes (like gender) in prompts leads to changes in model outputs. Examples include Strict Counterfactual Sentiment Parity and Weak Counterfactual Sentiment Parity.\n- Stereotype Metrics: These are used to assess stereotypical biases in model outputs (demonstrated in stereotype evaluation notebooks, though specific metrics are not named here).\n- Classification Fairness Metrics: These assess fairness in classification tasks (demonstrated in the classification fairness evaluation notebook).\n- Recommendation Fairness Metrics: These are used for evaluating fairness in recommendation system outputs (demonstrated in the recommendation fairness evaluation notebook).\n\nAnswer: The main categories of bias and fairness metrics supported by LangFair are Toxicity Metrics (e.g., Expected Maximum Toxicity), Counterfactual Fairness Metrics (e.g., Strict Counterfactual Sentiment Parity), Stereotype Metrics, Classification Fairness Metrics, and Recommendation Fairness Metrics.",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.3333333328,
+    "context_entity_recall":0.1428571427,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8666666667,
+    "faithfulness":0.6666666667,
     "answer_correctness":0.2889907431
   }
 ]

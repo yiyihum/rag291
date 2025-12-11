@@ -10,7 +10,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.705154898
+    "answer_correctness":0.7496213012
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -37,7 +37,7 @@
     "context_entity_recall":0.333333333,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.75,
+    "faithfulness":0.9375,
     "answer_correctness":0.9860144617
   },
   {
@@ -64,7 +64,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.6809288184
+    "answer_correctness":0.5193903569
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -77,7 +77,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.218237757
+    "answer_correctness":0.468237757
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -89,8 +89,8 @@
     "context_entity_recall":0.0,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8,
-    "answer_correctness":0.3747895509
+    "faithfulness":0.8181818182,
+    "answer_correctness":0.5247895509
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -114,11 +114,11 @@
     ],
     "response":"The context explains that OpenRLHF supports various RLHF configurations and advanced features. When it comes to RL Dynamic Sampling from the DAPO paper, the documentation specifically mentions enabling it with a command-line flag and configuring its mode using another flag. The two relevant flags highlighted are:\n\n- --enable_rl_dynamic_sampling\n- --rl_dynamic_sampling_mode\n\nThese flags are directly referenced as the method for turning on and adjusting RL Dynamic Sampling in OpenRLHF.\n\nAnswer: The two specific command-line flags to enable and configure RL Dynamic Sampling in OpenRLHF are --enable_rl_dynamic_sampling and --rl_dynamic_sampling_mode.",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.0,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.3333333333,
-    "answer_correctness":0.2290462034
+    "answer_correctness":0.6576176319
   },
   {
     "user_input":"How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",
@@ -128,11 +128,11 @@
     ],
     "response":"The context explains that the Multimodal-Textbook dataset is structured in an interleaved or alternating format, where images (keyframes from videos) and text (ASR-transcribed speech or OCR-derived content) are presented in sequence. Specifically, there are lists for \"images\" and \"texts,\" and each uses \"None\" in positions belonging to the other modality. For example, in the \"images\" list, \"None\" marks a text position, and in the \"texts\" list, \"None\" marks an image position. This design maintains the original alignment found in instructional videos, providing coherent context for educational content.\n\nAnswer: The Multimodal-Textbook dataset alternates images (video keyframes) and text (ASR or OCR-derived) in interleaved lists, using \"None\" placeholders to maintain their sequential alignment for educational content.",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing JSON structure with alternating images\/null entries, ASR texts, and OCR enrichment.Interleaved OBELICS-style: images list with keyframes and None; texts list with ASR and None; text_ocr_list adds OCR.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.5999999988,
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.6032457253
+    "answer_correctness":0.7474764945
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -142,11 +142,11 @@
     ],
     "response":"The context explains that the Multimodal-Textbook dataset's images are provided in a compressed file named dataset_images_interval_7.tar.gz, which consists of multiple tar parts. To use the dataset, it is necessary to extract these files. The recommended procedure is shown in the documentation with a specific code line for extraction.\n\nAnswer:  \ntar -xvf dataset_images_interval_7.tar.gz --force-local",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":0.2857142853,
+    "context_entity_recall":null,
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":0.8333333333,
-    "answer_correctness":0.5473556487
+    "answer_correctness":0.3509270773
   },
   {
     "user_input":"What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
@@ -155,7 +155,7 @@
     ],
     "response":"LangFair assesses bias and fairness in large language models using a variety of metrics, which are organized into distinct categories. These categories help capture different types of potential model risks in real-world applications. Key categories highlighted in the context include toxicity, stereotypes, and counterfactual fairness. Examples of each would include metrics that detect toxic language output, measure the presence of harmful stereotypes, and assess fairness by comparing outputs for similar prompts differing only in protected attributes.\n\nAnswer:  \nThe main categories of bias and fairness metrics supported by LangFair are:\n- Toxicity (example: detecting toxic language in outputs)\n- Stereotypes (example: measuring stereotype presence in generated text)\n- Counterfactual fairness (example: comparing model outputs for prompts differing only by protected attributes)",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.428571428,
+    "context_entity_recall":0.1666666664,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,

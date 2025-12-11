@@ -1,3 +1,3 @@
 RAGAS Evaluation Results for simple_dense_processed
 ============================================================
-{'context_entity_recall': 0.2104, 'context_precision': 0.5833, 'context_recall': 0.6458, 'faithfulness': 0.7860, 'answer_correctness': 0.4743}
+{'context_entity_recall': 0.1730, 'context_precision': 0.5833, 'context_recall': 0.6458, 'faithfulness': 0.8167, 'answer_correctness': 0.4802}

@@ -9,7 +9,7 @@
     "context_entity_recall":0.2857142853,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8,
+    "faithfulness":1.0,
     "answer_correctness":0.7732855314
   },
   {
@@ -33,11 +33,11 @@
     ],
     "response":"The PANDA paper details a novel multi-step methodology for constructing the first Chinese counterspeech dataset. The approach leverages advanced algorithms to generate and select appropriate counterspeech, followed by human oversight for quality assurance.\n\nBrief explanation:\n- The methodology combines several techniques: an \"LLM-as-a-Judge\" is used to evaluate generated counterspeech candidates; simulated annealing is employed as an optimization strategy; responses are generated in a zero-shot manner; and a round-robin algorithm ensures diversity and coverage in candidate generation.\n- After these computational steps, a manual verification process is implemented to confirm the quality and contextual relevance of the dataset items.\n\nAnswer: The methodology for creating the dataset involves 1) using an LLM-as-a-Judge to score counterspeech responses; 2) applying simulated annealing and a round-robin algorithm for efficient and diverse candidate selection; and 3) performing manual verification to ensure quality and contextual relevance.",
     "reference":"Primary evidence: The PANDA paper abstract (2501.00697) describes a novel approach using an LLM-as-a-Judge, simulated annealing, zero-shot generation, and a round-robin algorithm, followed by manual verification for quality.The dataset was created using a novel approach that combines an LLM-as-a-Judge, simulated annealing, zero-shot Chinese counterspeech generation with LLMs, and a round-robin algorithm. This was followed by manual verification for quality and contextual relevance.",
-    "context_entity_recall":0.333333333,
+    "context_entity_recall":0.3749999995,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8333333333,
-    "answer_correctness":0.7331510654
+    "faithfulness":0.9444444444,
+    "answer_correctness":0.8164843988
   },
   {
     "user_input":"For the 3 NVIDIA persona datasets, which one has the highest download counts? And what are their language support and licensing details?",
@@ -51,7 +51,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.9285714286,
-    "answer_correctness":0.7419486647
+    "answer_correctness":0.7627178954
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -64,7 +64,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.5193881524
+    "answer_correctness":0.5193871138
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -78,7 +78,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.2174282598
+    "answer_correctness":0.217390812
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -103,8 +103,8 @@
     "context_entity_recall":0.3333333328,
     "context_precision":0.9999999999,
     "context_recall":0.75,
-    "faithfulness":1.0,
-    "answer_correctness":0.2763018117
+    "faithfulness":0.9444444444,
+    "answer_correctness":0.2245776737
   },
   {
     "user_input":"I want to implement RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework. According to the documentation, what are the two specific command-line flags that enable and configure this feature?",
@@ -117,7 +117,7 @@
     "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.7777777778,
+    "faithfulness":0.75,
     "answer_correctness":0.2205670282
   },
   {
@@ -132,7 +132,7 @@
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.6428617716
+    "answer_correctness":0.3595034507
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -145,7 +145,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.2,
-    "answer_correctness":0.4787144107
+    "answer_correctness":0.5748682569
   },
   {
     "user_input":"What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
@@ -155,10 +155,10 @@
     ],
     "response":"LangFair supports multiple categories of bias and fairness metrics to assess large language models, each addressing specific risks such as toxicity, stereotypes, and counterfactual fairness. Within each category, representative metrics are provided to capture different aspects of bias:\n\n- Toxicity: Evaluates the presence of harmful or offensive content, though specific metric names are not detailed in the context.\n- Stereotypes: Measured using the StereotypeMetrics tools, which focus on quantifying stereotype-related biases in LLM outputs.\n- Counterfactual Fairness: Includes metrics such as Strict Counterfactual Sentiment Parity, Weak Counterfactual Sentiment Parity, Counterfactual Cosine Similarity Score, Counterfactual BLEU, and Counterfactual ROUGE-L, all designed to assess whether changing sensitive attributes in prompts leads to unfair changes in model output.\n- Recommendation (Counterfactual) Fairness: Example metrics are Jaccard Similarity, Search Result Page Misinformation Score, and Pairwise Ranking Accuracy Gap, which evaluate fairness in ranked or recommended content.\n\nAnswer: The main categories of bias and fairness metrics supported by LangFair are:\n1. Toxicity (e.g., toxicity evaluation metrics)\n2. Stereotypes (e.g., StereotypeMetrics)\n3. Counterfactual Fairness (e.g., Strict\/Weak Counterfactual Sentiment Parity, Counterfactual Cosine Similarity Score, Counterfactual BLEU, Counterfactual ROUGE-L)\n4. Recommendation (Counterfactual) Fairness (e.g., Jaccard Similarity, Search Result Page Misinformation Score, Pairwise Ranking Accuracy Gap).",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.0,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.9375,
-    "answer_correctness":0.3377889926
+    "answer_correctness":0.3377784598
   }
 ]

@@ -12,8 +12,8 @@
     "context_entity_recall":0.2857142853,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8181818182,
-    "answer_correctness":0.3773800192
+    "faithfulness":0.1538461538,
+    "answer_correctness":0.3607729526
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -43,11 +43,11 @@
     ],
     "response":"The PANDA paper addresses the lack of Chinese counterspeech resources by introducing a novel multi-step methodology to create an effective counterspeech dataset. The process involves generating counterspeech using a large language model (LLM) acting as a judge, relying on specific techniques like simulated annealing, zero-shot counterspeech generation by LLMs, and a round-robin algorithm. After the automated generation steps, the outputs undergo manual verification to ensure quality and contextual relevance.\n\nAnswer: The methodology for creating the first Chinese counterspeech dataset includes: (1) using an LLM-as-a-Judge, (2) applying simulated annealing, (3) leveraging LLMs for zero-shot counterspeech generation, (4) utilizing a round-robin algorithm, and (5) performing manual verification for quality and contextual relevance.",
     "reference":"Primary evidence: The PANDA paper abstract (2501.00697) describes a novel approach using an LLM-as-a-Judge, simulated annealing, zero-shot generation, and a round-robin algorithm, followed by manual verification for quality.The dataset was created using a novel approach that combines an LLM-as-a-Judge, simulated annealing, zero-shot Chinese counterspeech generation with LLMs, and a round-robin algorithm. This was followed by manual verification for quality and contextual relevance.",
-    "context_entity_recall":0.1249999998,
+    "context_entity_recall":0.111111111,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.9811691393
+    "answer_correctness":0.9486215101
   },
   {
     "user_input":"For the 3 NVIDIA persona datasets, which one has the highest download counts? And what are their language support and licensing details?",
@@ -61,9 +61,9 @@
     "reference":"Primary evidence: manifest entries for nvidia\/Nemotron-Personas, nvidia\/Nemotron-Personas-Japan, nvidia\/Nemotron-Personas-India with download counts and language tags.nvidia\/Nemotron-Personas; Licenses: CC-BY-4.0; Languages: en \/ ja \/ en+hi.",
     "context_entity_recall":0.1428571427,
     "context_precision":0.0,
-    "context_recall":0.5,
+    "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.3843649986
+    "answer_correctness":0.394173164
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -111,7 +111,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4376195203
+    "answer_correctness":0.5762800677
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -124,8 +124,8 @@
     "context_entity_recall":0.3333333328,
     "context_precision":0.9999999999,
     "context_recall":0.75,
-    "faithfulness":1.0,
-    "answer_correctness":0.2184959819
+    "faithfulness":0.875,
+    "answer_correctness":0.2184866412
   },
   {
     "user_input":"I want to implement RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework. According to the documentation, what are the two specific command-line flags that enable and configure this feature?",
@@ -140,7 +140,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4040240425
+    "answer_correctness":0.6123573758
   },
   {
     "user_input":"How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",
@@ -152,11 +152,11 @@
     ],
     "response":"The Multimodal-Textbook dataset is organized in an image-text interleaved format, meaning that educational content is structured by alternating between image entries and text entries. The text is transcribed from the audio of instructional videos (using ASR), while the images are extracted keyframes from the same videos. These images and texts are closely aligned to provide coherent and contextually rich information across fundamental subjects like mathematics and physics.\n\nAnswer: The Multimodal-Textbook dataset alternates between images (from video keyframes) and text (from transcribed audio) to present educational content in a tightly aligned, image-text interleaved structure.",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing JSON structure with alternating images\/null entries, ASR texts, and OCR enrichment.Interleaved OBELICS-style: images list with keyframes and None; texts list with ASR and None; text_ocr_list adds OCR.",
-    "context_entity_recall":0.1999999996,
+    "context_entity_recall":0.5999999988,
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4754420552
+    "answer_correctness":0.5412511265
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -166,11 +166,11 @@
     ],
     "response":"The context explains that the Multimodal-Textbook dataset images are split into 20 sub-files named dataset_images_interval_7.tar.gz.part_00, dataset_images_interval_7.tar.gz.part_01, and so forth, because of the large file size. To use the dataset, you need to join these parts into a single tar.gz file before extracting the images.\n\nAnswer: The recommended code line for extracting the dataset is:\ncat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz && tar -zxvf dataset_images_interval_7.tar.gz",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":null,
+    "context_entity_recall":0.1428571427,
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":0.8,
-    "answer_correctness":0.4787246581
+    "answer_correctness":0.4787104534
   },
   {
     "user_input":"What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
@@ -180,10 +180,10 @@
     ],
     "response":"LangFair supports various categories of bias and fairness metrics to assess large language models in different use cases. Each category focuses on a specific aspect of fairness or bias. Representative examples are provided for each metric category.\n\nAnswer: The main categories of bias and fairness metrics supported by LangFair and their representative examples are:\n\n- Toxicity Metrics: Examples include Expected Maximum Toxicity, Toxicity Probability, and Toxic Fraction.\n- Counterfactual Fairness Metrics: Examples include Strict Counterfactual Sentiment Parity and Weak Counterfactual Sentiment Parity.",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.0,
+    "context_entity_recall":0.1428571427,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.631489707
+    "answer_correctness":0.5036317384
   }
 ]

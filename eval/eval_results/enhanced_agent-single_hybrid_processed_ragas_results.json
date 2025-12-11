@@ -9,7 +9,7 @@
     "context_entity_recall":0.2857142853,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":1.0,
+    "faithfulness":0.9333333333,
     "answer_correctness":0.7343685316
   },
   {
@@ -24,7 +24,7 @@
     "context_entity_recall":null,
     "context_precision":0.0,
     "context_recall":0.0,
-    "faithfulness":0.8260869565,
+    "faithfulness":0.8695652174,
     "answer_correctness":0.2571275234
   },
   {
@@ -35,11 +35,11 @@
     ],
     "response":"The PANDA paper addresses the lack of Chinese counterspeech resources by introducing the first such dataset. Their methodology incorporates several advanced algorithms for generating and refining counterspeech. The process begins with the use of an LLM-as-a-Judge, employs simulated annealing, utilizes zero-shot generation in Chinese, and applies a round-robin algorithm to ensure diversity and quality among candidate answers. Importantly, after these automatic and algorithmic steps, all generated data undergo manual verification to ensure both quality and contextual relevance.\n\nAnswer: The dataset was created using a novel multi-step methodology that combines an LLM-as-a-Judge, simulated annealing, zero-shot Chinese text generation, and a round-robin algorithm, with all outputs then manually verified for quality and contextual relevance.",
     "reference":"Primary evidence: The PANDA paper abstract (2501.00697) describes a novel approach using an LLM-as-a-Judge, simulated annealing, zero-shot generation, and a round-robin algorithm, followed by manual verification for quality.The dataset was created using a novel approach that combines an LLM-as-a-Judge, simulated annealing, zero-shot Chinese counterspeech generation with LLMs, and a round-robin algorithm. This was followed by manual verification for quality and contextual relevance.",
-    "context_entity_recall":0.333333333,
+    "context_entity_recall":0.3749999995,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.8571428571,
-    "answer_correctness":0.9581041904
+    "faithfulness":0.7333333333,
+    "answer_correctness":0.8358819682
   },
   {
     "user_input":"For the 3 NVIDIA persona datasets, which one has the highest download counts? And what are their language support and licensing details?",
@@ -56,7 +56,7 @@
     "context_precision":0.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.3908770705
+    "answer_correctness":0.4117104038
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -69,7 +69,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4919133204
+    "answer_correctness":0.5191860477
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -84,7 +84,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.218758193
+    "answer_correctness":0.2187607048
   },
   {
     "user_input":"How do I install the FlashInfer library from PyPI, including its optional 'cubin' and 'JIT cache' components?",
@@ -97,7 +97,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.8888888889,
-    "answer_correctness":0.4026510727
+    "answer_correctness":0.4761804845
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -109,8 +109,8 @@
     "context_entity_recall":0.3333333328,
     "context_precision":0.9999999999,
     "context_recall":0.75,
-    "faithfulness":1.0,
-    "answer_correctness":0.2221326862
+    "faithfulness":0.9411764706,
+    "answer_correctness":0.2846326862
   },
   {
     "user_input":"I want to implement RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework. According to the documentation, what are the two specific command-line flags that enable and configure this feature?",
@@ -124,7 +124,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.2857142857,
-    "answer_correctness":0.2249278807
+    "answer_correctness":0.2249693766
   },
   {
     "user_input":"How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",
@@ -148,11 +148,11 @@
     ],
     "response":"The context recommends extracting the Multimodal-Textbook dataset from tar parts before use, and specifies the exact command to do so. This ensures the keyframes and associated data are available in the expected directory structure for further processing or model training.\n\nAnswer: tar -xvf .\/dataset_images_interval_7.tar.gz",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":0.2857142853,
+    "context_entity_recall":0.3333333328,
     "context_precision":0.5,
     "context_recall":1.0,
     "faithfulness":0.6,
-    "answer_correctness":0.4739491843
+    "answer_correctness":0.5701030304
   },
   {
     "user_input":"What are the main categories of bias and fairness metrics supported by LangFair and what are representative examples of each category?",
@@ -162,10 +162,10 @@
     ],
     "response":"LangFair supports multiple categories of bias and fairness metrics to comprehensively evaluate large language model outputs. These categories reflect key areas of concern when assessing LLMs, such as harmful content, unequal treatment, and reliance on stereotypes. The main categories, along with representative examples, are:\n\n- Toxicity: Metrics in this category assess whether the model's outputs contain harmful, offensive, or toxic language.\n- Counterfactual fairness: These metrics evaluate if model outputs change unfairly when protected attributes (like gender or race) in the input are altered, holding all else constant.\n- Stereotypes: This category looks at whether the model's responses reinforce or perpetuate stereotypes about protected groups.\nAnswer: The main categories of bias and fairness metrics supported by LangFair are toxicity (e.g., detecting harmful or offensive language), counterfactual fairness (e.g., measuring output changes when protected attributes are swapped), and stereotypes (e.g., assessing the presence of group-based or identity-based stereotypes).",
     "reference":"Primary evidence: LangFair README tables enumerating Toxicity, Counterfactual, Stereotype, Recommendation, and Classification metrics with specific examples.Categories: Toxicity; Counterfactual; Stereotype; Recommendation; Classification (per README).",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.0,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.2900815101
+    "answer_correctness":0.3647568348
   }
 ]

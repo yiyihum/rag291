@@ -9,10 +9,10 @@
     "response":"The context describes a high-quality multimodal textbook corpus collected over 2.5 years by the organization DAMO-NLP-SG, as evidenced by the code repository link (https:\/\/github.com\/DAMO-NLP-SG\/multimodal_textbook). The dataset consists of 6.5 million keyframes extracted from 75,000 instructional videos with a total of 0.75 billion (750 million) text tokens (from ASR and OCR). These videos are organized into 610,000 interleaved samples, each containing on average 10.7 keyframes and 1,230 text tokens.\n\nAnswer: The dataset was proposed by DAMO-NLP-SG and contains 6.5 million keyframes, 0.75 billion text tokens, and 610,000 interleaved samples extracted from 75,000 instructional videos.",
     "reference":"Primary evidence: The paper '2.5 Years in Class: A Multimodal Textbook for Vision-Language Pretraining' (arXiv:2501.00958) and the associated dataset card for DAMO-NLP-SG\/multimodal_textbook, which describe the dataset's origin from the DAMO-NLP-SG organization and its key statistics: 6.5M keyframes and 0.8B text tokens.Organization: DAMO-NLP-SG; Statistics: 0.8B text tokens, 610K samples.",
     "context_entity_recall":0.2857142853,
-    "context_precision":0.9999999999,
+    "context_precision":1.0,
     "context_recall":1.0,
-    "faithfulness":1.0,
-    "answer_correctness":0.5741294302
+    "faithfulness":0.9375,
+    "answer_correctness":0.5665536727
   },
   {
     "user_input":"For the safety-related dataset that uses a CC-BY-4.0 license and includes redteaming, safety, and jailbreak tags, what are its field names?",
@@ -24,11 +24,11 @@
     ],
     "response":"Based on the context, the dataset that is safety-related, uses a CC-BY-4.0 license, and is tagged with redteaming, safety, and jailbreak is JailbreakGuardrailBenchmark (which includes datasets like JailbreakHub, MultiJail, AlpacaEval, and OR-Bench). For these datasets, each entry is described as a dictionary with three fields: index, goal, and jailbreak prompt.\n\nAnswer: index, goal, jailbreak prompt",
     "reference":"Primary evidence: Pliny_HackAPrompt_Dataset card with license: cc-by-4.0 and tags including redteaming\/safety\/jailbreaks. The README file describes the fields: submission_id, session_id, challenge_slug, intent, model_id, passed, token_count, and messages.submission_id, session_id, challenge_slug, intent, model_id, passed, token_count, messages.",
-    "context_entity_recall":0.0714285714,
+    "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":0.875,
-    "answer_correctness":0.4785675904
+    "answer_correctness":0.4281474224
   },
   {
     "user_input":"The PANDA paper introduces the first Chinese counterspeech dataset. What is the novel multi-step methodology, including specific algorithms and the final verification process, used to create this dataset?",
@@ -44,7 +44,7 @@
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.5533171079
+    "answer_correctness":0.587408017
   },
   {
     "user_input":"For the 3 NVIDIA persona datasets, which one has the highest download counts? And what are their language support and licensing details?",
@@ -56,11 +56,11 @@
     ],
     "response":"Based on the context, the three NVIDIA persona datasets referenced are:\n\n- nvidia\/Nemotron-Personas (main US-based English dataset)\n- nvidia\/Nemotron-Personas-Japan (Japanese version)\n- nvidia\/Nemotron-Pretraining-Code-v1 (code-specific dataset, though less clearly a \"persona\" dataset)\n\nHowever, the provided context does not specify download counts for any of these datasets. Therefore, it is not possible to determine which has the highest download counts from the information given.\n\nLanguage support and licensing details (as per context):\n- nvidia\/Nemotron-Personas: English language, based on US Census demographic data. Licensed under Creative Commons Attribution 4.0 International License (CC BY 4.0).\n- nvidia\/Nemotron-Personas-Japan: Japanese language personas aligned to real-world distributions. Licensed under Creative Commons Attribution 4.0 International License (CC BY 4.0).\n- nvidia\/Nemotron-Pretraining-Code-v1: Used for code and math, language unclear, likely intended for programming\/code datasets. Licensed under NVIDIA Open Data License Agreement.\n\nAnswer:\nThe context does not specify download counts for any of the NVIDIA persona datasets, so it is not possible to say which one has the highest download counts. Their language supports are: nvidia\/Nemotron-Personas (English), nvidia\/Nemotron-Personas-Japan (Japanese), and nvidia\/Nemotron-Pretraining-Code-v1 (likely code\/programming). The licensing for the first two is CC BY 4.0, and for the third is the NVIDIA Open Data License Agreement.",
     "reference":"Primary evidence: manifest entries for nvidia\/Nemotron-Personas, nvidia\/Nemotron-Personas-Japan, nvidia\/Nemotron-Personas-India with download counts and language tags.nvidia\/Nemotron-Personas; Licenses: CC-BY-4.0; Languages: en \/ ja \/ en+hi.",
-    "context_entity_recall":0.2857142853,
+    "context_entity_recall":0.0,
     "context_precision":0.0,
     "context_recall":0.0,
     "faithfulness":1.0,
-    "answer_correctness":0.357809232
+    "answer_correctness":0.5675994418
   },
   {
     "user_input":"Which paper introduces TAPE (Contextualized Equivariant Positional Encoding) and where can the code implementation be found?",
@@ -76,7 +76,7 @@
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.369353099
+    "answer_correctness":0.519353099
   },
   {
     "user_input":"Which 9B parameter model uses a hybrid Mamba-2 and MLP architecture with only four attention layers and achieves strong reasoning performance?",
@@ -106,7 +106,7 @@
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.4895830416
+    "answer_correctness":0.4123671097
   },
   {
     "user_input":"I need to evaluate a model for bias and fairness using the LangFair library. What is the complete workflow?",
@@ -116,7 +116,7 @@
     ],
     "response":"Based on the context, LangFair provides a structured and customizable workflow for evaluating large language models (LLMs) for bias and fairness. The process is designed to tailor evaluations to your specific prompts and use cases, ensuring that the results are relevant to your real-world applications.\n\nBrief Explanation:\nLangFair uses a \"Bring Your Own Prompts\" (BYOP) approach, allowing you to generate evaluation datasets with your prompts, collect model responses, and then apply output-based metrics chosen according to your needs. The process is supported by a decision framework to help select the most relevant bias and fairness metrics.\n\nAnswer: The complete workflow for evaluating a model for bias and fairness using LangFair is as follows:\n1. Generate evaluation datasets using your specific prompts (BYOP) relevant to your use case.\n2. Obtain LLM-generated responses to these prompts.\n3. Select appropriate bias and fairness metrics using LangFair\u2019s actionable decision framework that aligns with your goals and context.\n4. Calculate these metrics using LangFair\u2019s output-based tools (no need for internal model access).\n5. Review results in the context of real-world performance and governance needs.",
     "reference":"Primary evidence: The LangFair README's Quickstart Guide outlines the three main steps: 1) Installation via pip, 2) Using ResponseGenerator to create model responses, and 3) Using a metrics class like ToxicityMetrics to perform the evaluation.1. Install the library using 'pip install langfair'. 2. Generate model responses using the 'ResponseGenerator' class. 3. Compute fairness metrics, such as toxicity, by initializing a metric class like 'ToxicityMetrics' and using its 'compute_metric' method on the generated responses.",
-    "context_entity_recall":0.3333333328,
+    "context_entity_recall":0.4999999992,
     "context_precision":0.9999999999,
     "context_recall":0.75,
     "faithfulness":1.0,
@@ -133,11 +133,11 @@
     ],
     "response":"The context mentions support for features and their activation in training scripts. For RL Dynamic Sampling from the DAPO paper within the OpenRLHF framework, the documentation specifies two command-line flags to enable and configure this feature: --dynamic_sampling and --dynamic_sampling_config. \n\nBrief explanation:  \nThese flags directly reflect enabling dynamic sampling and providing its configuration.\n\nAnswer:  \nThe two specific command-line flags are --dynamic_sampling and --dynamic_sampling_config.",
     "reference":"Primary evidence: The OpenRLHF README's feature list explicitly states 'Support RL Dynamic Sampling from DAPO' and links it to the '--dynamic_filtering' and '--dynamic_filtering_reward_range' flags.The two flags are '--dynamic_filtering' and '--dynamic_filtering_reward_range'.",
-    "context_entity_recall":0.1999999996,
-    "context_precision":1.0,
+    "context_entity_recall":null,
+    "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.2,
-    "answer_correctness":0.5026421879
+    "faithfulness":0.1666666667,
+    "answer_correctness":0.4799149152
   },
   {
     "user_input":"How is the Multimodal-Textbook dataset structured with alternating images and text entries for educational content?",
@@ -148,11 +148,11 @@
     ],
     "response":"The Multimodal-Textbook dataset is structured by extracting and interleaving keyframes (images) and transcribed audio (ASR texts) from instructional videos. These image and text entries are temporally aligned, providing a continuous and coherent educational narrative. In practice, each sample contains multiple images (keyframes) and associated blocks of text, capturing both the visual and verbal content of the lessons in the same order as they appear in the original videos.\n\nAnswer: The Multimodal-Textbook dataset is organized as an interleaved image-text corpus, where keyframes (images) and transcribed audio texts from educational videos are alternated and temporally aligned to provide coherent, context-rich educational content.",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing JSON structure with alternating images\/null entries, ASR texts, and OCR enrichment.Interleaved OBELICS-style: images list with keyframes and None; texts list with ASR and None; text_ocr_list adds OCR.",
-    "context_entity_recall":null,
+    "context_entity_recall":0.1999999996,
     "context_precision":1.0,
     "context_recall":1.0,
     "faithfulness":1.0,
-    "answer_correctness":0.559628797
+    "answer_correctness":0.5724493098
   },
   {
     "user_input":"What is the recommended procedure for extracting the Multimodal-Textbook dataset from tar parts before use? Give the instructed code line.",
@@ -162,7 +162,7 @@
     ],
     "response":"The context states that the image folder for the Multimodal-Textbook dataset is provided as a large tar archive split into 20 parts (named dataset_images_interval_7.tar.gz.part_00, ..., part_19). To extract it, these parts need to be combined and then untarred.\n\nThe instructed code line to do this is:\n\ncat dataset_images_interval_7.tar.gz.part_* | tar -xzvf -\n\nAnswer: cat dataset_images_interval_7.tar.gz.part_* | tar -xzvf -",
     "reference":"Primary evidence: Multimodal-Textbook dataset card showing shell commands for cat of part files followed by tar extraction for the 600GB image folder.You need to merge them first and then decompress. `cat dataset_images_interval_7.tar.gz.part_* > dataset_images_interval_7.tar.gz`",
-    "context_entity_recall":0.1428571427,
+    "context_entity_recall":0.1666666664,
     "context_precision":0.9999999999,
     "context_recall":1.0,
     "faithfulness":0.6,
@@ -179,7 +179,7 @@
     "context_entity_recall":0.0,
     "context_precision":0.9999999999,
     "context_recall":1.0,
-    "faithfulness":0.9230769231,
-    "answer_correctness":0.7803558877
+    "faithfulness":1.0,
+    "answer_correctness":0.5009789267
   }
 ]
