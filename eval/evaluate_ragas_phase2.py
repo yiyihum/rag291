@@ -31,7 +31,7 @@ from ragas.metrics import (
 from ragas.llms import LangchainLLMWrapper
 from langchain_openai import ChatOpenAI
 
-from utils import get_doc_id
+from utils import get_doc_id, load_json
 
 import os
 import json
@@ -72,7 +72,7 @@ def get_arxiv_corpus():
     return ARXIV_CORPUS
 
 
-def get_full_doc_content(doc_id: str) -> str:
+def get_full_doc_content(doc_id: str, path: str) -> str:
     """
     Read full document content from doc_id path.
     
@@ -94,10 +94,10 @@ def get_full_doc_content(doc_id: str) -> str:
     
     # Handle file paths
     # Construct full path (relative to eval directory)
-    if doc_id.startswith('data/'):
-        file_path = "../" + doc_id
+    if path.startswith('data/'):
+        file_path = "../" + path
     else:
-        file_path = doc_id
+        print('Wrong path!')
     
     # Read the file
     if os.path.exists(file_path):
@@ -190,12 +190,13 @@ def load_enhanced_responses(responses_path: str, use_full_docs: bool = True):
             # doc_id = item.get("doc_id", "")
             doc_id = get_doc_id(item.get("metadata"))
             # print(doc_id)
-            
+            file_path = item.get("metadata").get("path", "")
+
             if use_full_docs and doc_id:
                 # Read full document content (deduplicate by doc_id)
                 if doc_id not in seen_docs:
-                    # full_content = get_full_doc_content(doc_id)
-                    full_content = item.get("raw_content", "Document not found!")
+                    full_content = get_full_doc_content(doc_id, file_path)
+                    # full_content = item.get("content", "Document not found!")
                     if full_content and not full_content.startswith("Document not found"):
                         doc_contexts.append(full_content)
                         seen_docs.add(doc_id)                
@@ -213,7 +214,7 @@ def load_enhanced_responses(responses_path: str, use_full_docs: bool = True):
         generated_answers.append(llm_response if llm_response else "No response generated.")
         
         # Extract ground truth
-        ground_truth = obj.get("ground_truth", "")
+        ground_truth = obj.get("notes_for_judges", "") + obj.get("ground_truth", "")
         ground_truths.append(ground_truth if ground_truth else "No ground truth available.")
     
     return questions, contexts, generated_answers, ground_truths

@@ -1,0 +1,12 @@
+{
+  "queries_judged": 12,
+  "ndcg@5": 1.018969758609997,
+  "map": 1.087962962962963,
+  "mrr@10": 0.875,
+  "recall@5": 0.888888888888889,
+  "primary_recall@5": null,
+  "recall@10": 0.888888888888889,
+  "primary_recall@10": null,
+  "recall@20": 0.888888888888889,
+  "primary_recall@20": null
+}

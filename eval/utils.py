@@ -50,6 +50,31 @@ def write_text(file_path, content):
     with open(file_path, 'w') as f:
         f.write(content)
 
+def json_to_jsonl(data, output_filepath):
+    # 2. Write to the output JSONL file
+    count = 0
+    with open(output_filepath, 'w', encoding='utf-8') as outfile:
+        if isinstance(data, list):
+            # If the root element is a list, iterate through it
+            for item in data:
+                # json.dumps converts the Python object to a JSON string
+                json_line = json.dumps(item)
+                outfile.write(json_line + '\n')
+                count += 1
+            print(f"Successfully converted {count} objects from the list.")
+        elif isinstance(data, dict):
+            # If the root element is a single object, write it directly
+            json_line = json.dumps(data)
+            outfile.write(json_line + '\n')
+            count = 1
+            print(f"Successfully converted the single root object.")
+        else:
+            print(f"Error: The root of the JSON file must be a list or a dictionary (object). Found: {type(data).__name__}")
+            return
+
+    print(f"Output: {output_filepath}")
+    print(f"--- Conversion Complete ---")
+
 # ===========================================================================================
 
 # formatting, get correct doc_id from various possible fields
@@ -114,24 +139,24 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from openai import OpenAI
 import os
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30), reraise=True)
-def call_openai(content: str, model: str = "gpt-4.1-mini", temperature: float = 0.0, max_tokens: int = 512) -> str:
-    messages = [{"role": "user", "content": content}]
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        top_p=1.0,
-    )
+# @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30), reraise=True)
+# def call_openai(content: str, model: str = "gpt-4.1-mini", temperature: float = 0.0, max_tokens: int = 512) -> str:
+#     messages = [{"role": "user", "content": content}]
+#     response = client.chat.completions.create(
+#         model=model,
+#         messages=messages,
+#         temperature=temperature,
+#         max_tokens=max_tokens,
+#         top_p=1.0,
+#     )
 
-    try:
-        return response.choices[0].message.content
-    except Exception:
-        print("Wrong structure for response, ", Exception)
-        return str(response)
+#     try:
+#         return response.choices[0].message.content
+#     except Exception:
+#         print("Wrong structure for response, ", Exception)
+#         return str(response)
     
 
 if __name__ == "__main__":
@@ -139,44 +164,54 @@ if __name__ == "__main__":
 
     # get LLM response with query + retrieved docs
 
-    faiss = load_json("../retrieve_results/faiss/retrieval_results_faiss.json")
-    faiss_chunk = load_json("../retrieve_results/faiss_chunk/retrieval_results_chunk_faiss.json")
-    qdrant = load_json("../retrieve_results/qdrant/retrieval_results_qdrant.json")
-    qdrant_chunk = load_json("../retrieve_results/qdrant_chunk/retrieval_results_chunk_qdrant.json")
+    faiss = load_json("../results_baseline/retrieve_results/faiss/retrieval_results_faiss.json")
+    faiss_chunk = load_json("../results_baseline/retrieve_results/faiss_chunk/retrieval_results_chunk_faiss.json")
+    qdrant = load_json("../results_baseline/retrieve_results/qdrant/retrieval_results_qdrant.json")
+    qdrant_chunk = load_json("../results_baseline/retrieve_results/qdrant_chunk/retrieval_results_chunk_qdrant.json")
 
-    requests = load_jsonl("../requests.jsonl")
+    json_to_jsonl(faiss, '../results_baseline/retrieve_results/retrieval_results_faiss.jsonl')
+    json_to_jsonl(faiss_chunk, '../results_baseline/retrieve_results/retrieval_results_chunk_faiss.jsonl')
+    json_to_jsonl(qdrant, '../results_baseline/retrieve_results/retrieval_results_qdrant.jsonl')
+    json_to_jsonl(qdrant_chunk, '../results_baseline/retrieve_results/retrieval_results_chunk_qdrant.jsonl')
+
+    # requests = load_jsonl("../requests.jsonl")
     
 
     # questions = [req["query"] for req in requests]    
-    outputs = []
-    idx = 0
-    for key in faiss:
-        print(idx)
-        obj = faiss[key]
+    # outputs = []
+    # idx = 0
+    # for key in faiss:
+    #     print(idx)
+    #     obj = faiss[key]
 
-        hits = obj.get("hits", [])
-        query = obj.get("query", "")
-        assert query, "Empty query!!!!"
+    #     hits = obj.get("hits", [])
+    #     query = obj.get("query", "")
+    #     assert query, "Empty query!!!!"
 
-        def sort_key(h):
-            if "rank" in h and isinstance(h["rank"], int):
-                return h["rank"]
-            return -float(h.get("score", 0.0))
-        hits_sorted = sorted(hits, key=sort_key)
-        # get all retrieved docs:
-        docs = [get_doc_content(h) for h in hits_sorted]
+    #     def sort_key(h):
+    #         if "rank" in h and isinstance(h["rank"], int):
+    #             return h["rank"]
+    #         return -float(h.get("score", 0.0))
+    #     hits_sorted = sorted(hits, key=sort_key)
+    #     # get all retrieved docs:
+    #     docs = [get_doc_content(h) for h in hits_sorted]
 
-        prompt = query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
-        for d in docs:
-            prompt += d + '\n'
+    #     prompt = query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
+    #     for d in docs:
+    #         prompt += d + '\n'
         
-        # obj["llm_response"] = "call_openai(prompt)"
-        requests[idx]["llm_response"] = call_openai(prompt)
-        # break
-        idx += 1
+    #     # obj["llm_response"] = "call_openai(prompt)"
+    #     requests[idx]["llm_response"] = call_openai(prompt)
+    #     # break
+    #     idx += 1
 
-    write_jsonl(requests, "../new_request.jsonl")
+    # write_jsonl(requests, "../new_request.jsonl")
 
 
-    li = ["asd", "asd", "asd"]
-    write_jsonl(li, "../test.jsonl")
+    # li = ["asd", "asd", "asd"]
+    # write_jsonl(li, "../test.jsonl")
+
+    # response = load_jsonl('../results_enhanced/responses_agent-loop_dense_processed.jsonl')
+
+    # for key in faiss:
+    #     print(key)

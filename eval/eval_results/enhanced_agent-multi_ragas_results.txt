@@ -1,3 +1,0 @@
-RAGAS Evaluation Results for agent-multi
-============================================================
-{'context_entity_recall': 0.2722, 'context_precision': 0.6667, 'context_recall': 0.7222, 'faithfulness': 0.6041, 'answer_correctness': 0.3814}

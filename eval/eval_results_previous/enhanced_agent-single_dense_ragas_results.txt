@@ -1,0 +1,3 @@
+RAGAS Evaluation Results for agent-single_dense
+============================================================
+{'context_entity_recall': 0.2182, 'context_precision': 0.6458, 'context_recall': 0.6875, 'faithfulness': 0.7922, 'answer_correctness': 0.3969}

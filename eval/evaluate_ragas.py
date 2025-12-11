@@ -8,7 +8,7 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 
 import os, argparse
-from utils import load_jsonl, load_json, write_jsonl, get_doc_content, call_openai
+from utils import load_jsonl, load_json, write_jsonl, get_doc_content   #, call_openai
 
 def make_eval_dataset(questions, contexts, generated_answers, ground_truths):
     data_list = []
@@ -122,7 +122,8 @@ if __name__ == "__main__":
                 prompt = tmp_query + "\nPlease answer the question in one or two sentences.\nHere is retrieved docs for reference.\n"
                 for d in docs:
                     prompt += d + '\n'
-                generated_answers.append(call_openai(prompt))
+                print("Use LLM generated code!")
+                # generated_answers.append(call_openai(prompt))
 
         requests = load_jsonl(args.qrels)
         questions = [req["query"] for req in requests]

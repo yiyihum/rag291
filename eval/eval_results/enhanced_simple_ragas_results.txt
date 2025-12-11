@@ -1,3 +1,0 @@
-RAGAS Evaluation Results for simple
-============================================================
-{'context_entity_recall': 0.2722, 'context_precision': 0.6667, 'context_recall': 0.7222, 'faithfulness': 0.6896, 'answer_correctness': 0.4707}

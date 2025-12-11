@@ -16,7 +16,10 @@ fi
 METHOD=${1:-agent-multi}
 
 # Construct the responses file path
-RESPONSES_PATH="../results_enhanced/responses_${METHOD}.jsonl"
+RESPONSES_PATH="../results_enhanced_p/responses_${METHOD}.jsonl"
+# RESPONSES_PATH="../results_baseline/retrieve_results/retrieval_results_${METHOD}.jsonl"
+
+OUTPUT_PATH="eval_results_previous"
 
 # Check if responses file exists
 if [ ! -f "$RESPONSES_PATH" ]; then
@@ -39,7 +42,7 @@ python evaluate_phase2.py \
     --qrels ../requests.jsonl \
     --ks 5 10 20 \
     --ndcg_k 5 \
-    --out_dir eval_results
+    --out_dir $OUTPUT_PATH
 
 # Phase 2b: RAGAS Evaluation
 echo ""
@@ -48,7 +51,7 @@ python evaluate_ragas_phase2.py \
     --run_name $METHOD \
     --responses_path $RESPONSES_PATH \
     --model_name gpt-4.1-mini \
-    --out_dir eval_results
+    --out_dir $OUTPUT_PATH
 
 echo ""
 echo "=============================================="

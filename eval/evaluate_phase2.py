@@ -20,7 +20,7 @@ import json
 import csv
 import math
 from collections import defaultdict, OrderedDict
-from utils import get_doc_id
+from utils import get_doc_id, load_json
 
 
 def load_jsonl(file_path):
