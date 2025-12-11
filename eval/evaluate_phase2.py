@@ -69,64 +69,63 @@ def write_csv(path, rows, fieldnames):
     
 #     return ""
 
+# def normalize_doc_id(doc_id: str) -> str:
+#     """
+#     Normalize doc_id to a canonical form for comparison.
+    
+#     Handles conversions like:
+#     - 'data/github_readmes/DAMO-NLP-SG/multimodal_textbook/README.md' -> 'DAMO-NLP-SG/multimodal_textbook'
+#     - 'data/hf_cards_2025/datasets/nvidia__Nemotron-Personas.md' -> 'nvidia/Nemotron-Personas'
+#     - 'data/arxiv_llm_2025/arxiv_llm_2025.jsonl' with arxiv_id '2501.00697' -> '2501.00697'
+#     """
+#     if not doc_id:
+#         return ""
+    
+#     doc_id = doc_id.strip()
+    
+#     # Handle GitHub README paths
+#     if 'github_readmes/' in doc_id:
+#         # Extract 'org/repo' from 'data/github_readmes/org/repo/README.md'
+#         parts = doc_id.split('github_readmes/')
+#         if len(parts) > 1:
+#             path_parts = parts[1].split('/')
+#             if len(path_parts) >= 2:
+#                 return f"{path_parts[0]}/{path_parts[1]}"
+    
+#     # Handle HuggingFace dataset/model card paths
+#     if 'hf_cards' in doc_id:
+#         # Extract from patterns like 'data/hf_cards_2025/datasets/nvidia__Nemotron-Personas.md'
+#         if '__' in doc_id:
+#             filename = doc_id.split('/')[-1]
+#             filename = filename.replace('.md', '')
+#             # Convert 'nvidia__Nemotron-Personas' to 'nvidia/Nemotron-Personas'
+#             return filename.replace('__', '/')
+    
+#     # Handle arxiv paths - keep as is if it's an arxiv ID
+#     if doc_id.startswith('250') or doc_id.startswith('240'):  # arxiv IDs like 2501.xxxxx
+#         return doc_id
+    
+#     return doc_id
 
-def normalize_doc_id(doc_id: str) -> str:
-    """
-    Normalize doc_id to a canonical form for comparison.
-    
-    Handles conversions like:
-    - 'data/github_readmes/DAMO-NLP-SG/multimodal_textbook/README.md' -> 'DAMO-NLP-SG/multimodal_textbook'
-    - 'data/hf_cards_2025/datasets/nvidia__Nemotron-Personas.md' -> 'nvidia/Nemotron-Personas'
-    - 'data/arxiv_llm_2025/arxiv_llm_2025.jsonl' with arxiv_id '2501.00697' -> '2501.00697'
-    """
-    if not doc_id:
-        return ""
-    
-    doc_id = doc_id.strip()
-    
-    # Handle GitHub README paths
-    if 'github_readmes/' in doc_id:
-        # Extract 'org/repo' from 'data/github_readmes/org/repo/README.md'
-        parts = doc_id.split('github_readmes/')
-        if len(parts) > 1:
-            path_parts = parts[1].split('/')
-            if len(path_parts) >= 2:
-                return f"{path_parts[0]}/{path_parts[1]}"
-    
-    # Handle HuggingFace dataset/model card paths
-    if 'hf_cards' in doc_id:
-        # Extract from patterns like 'data/hf_cards_2025/datasets/nvidia__Nemotron-Personas.md'
-        if '__' in doc_id:
-            filename = doc_id.split('/')[-1]
-            filename = filename.replace('.md', '')
-            # Convert 'nvidia__Nemotron-Personas' to 'nvidia/Nemotron-Personas'
-            return filename.replace('__', '/')
-    
-    # Handle arxiv paths - keep as is if it's an arxiv ID
-    if doc_id.startswith('250') or doc_id.startswith('240'):  # arxiv IDs like 2501.xxxxx
-        return doc_id
-    
-    return doc_id
 
-
-def extract_id_from_retrieved_doc(doc_id: str) -> list:
-    """
-    Extract possible matching IDs from a retrieved document path.
-    Returns a list of possible IDs that could match ground truth.
-    """
-    ids = [doc_id]  # Original
-    normalized = normalize_doc_id(doc_id)
-    if normalized and normalized != doc_id:
-        ids.append(normalized)
+# def extract_id_from_retrieved_doc(doc_id: str) -> list:
+#     """
+#     Extract possible matching IDs from a retrieved document path.
+#     Returns a list of possible IDs that could match ground truth.
+#     """
+#     ids = [doc_id]  # Original
+#     normalized = normalize_doc_id(doc_id)
+#     if normalized and normalized != doc_id:
+#         ids.append(normalized)
     
-    # Also try extracting just the filename without extension
-    if '/' in doc_id:
-        filename = doc_id.split('/')[-1]
-        basename = filename.rsplit('.', 1)[0] if '.' in filename else filename
-        if basename and basename not in ids:
-            ids.append(basename)
+#     # Also try extracting just the filename without extension
+#     if '/' in doc_id:
+#         filename = doc_id.split('/')[-1]
+#         basename = filename.rsplit('.', 1)[0] if '.' in filename else filename
+#         if basename and basename not in ids:
+#             ids.append(basename)
     
-    return ids
+#     return ids
 
 
 def load_qrels(path: str, key_name="rel"):
@@ -186,41 +185,42 @@ def load_enhanced_runs(responses_path: str):
             doc_id = get_doc_id(metadata)
             if doc_id and doc_id != "unknown":
                 # Store tuple of (normalized_id, all_possible_ids)
-                possible_ids = extract_id_from_retrieved_doc(doc_id)
-                doc_entries.append((normalize_doc_id(doc_id), set(possible_ids)))
+                # possible_ids = extract_id_from_retrieved_doc(doc_id)
+                # doc_entries.append((normalize_doc_id(doc_id), set(possible_ids)))
+                doc_entries.append(doc_id)
         
         runs[qid] = doc_entries
     
     return runs
 
 
-def check_doc_match(doc_entry, qrels_for_q):
-    """
-    Check if a retrieved document matches any ground truth document.
+# def check_doc_match(doc_entry, qrels_for_q):
+#     """
+#     Check if a retrieved document matches any ground truth document.
     
-    Args:
-        doc_entry: Tuple of (normalized_id, set of all_possible_ids)
-        qrels_for_q: Dict of ground_truth_id -> relevance
+#     Args:
+#         doc_entry: Tuple of (normalized_id, set of all_possible_ids)
+#         qrels_for_q: Dict of ground_truth_id -> relevance
     
-    Returns:
-        Relevance score if matched, 0 otherwise
-    """
-    normalized_id, possible_ids = doc_entry
+#     Returns:
+#         Relevance score if matched, 0 otherwise
+#     """
+#     normalized_id, possible_ids = doc_entry
     
-    # Check if normalized form matches
-    if normalized_id in qrels_for_q:
-        return qrels_for_q[normalized_id]
+#     # Check if normalized form matches
+#     if normalized_id in qrels_for_q:
+#         return qrels_for_q[normalized_id]
     
-    # Check if any possible ID matches
-    for pid in possible_ids:
-        if pid in qrels_for_q:
-            return qrels_for_q[pid]
-        # Also try partial matching (e.g., 'org/repo' in 'org/repo/README.md')
-        for gt_id in qrels_for_q.keys():
-            if gt_id in pid or pid in gt_id:
-                return qrels_for_q[gt_id]
+#     # Check if any possible ID matches
+#     for pid in possible_ids:
+#         if pid in qrels_for_q:
+#             return qrels_for_q[pid]
+#         # Also try partial matching (e.g., 'org/repo' in 'org/repo/README.md')
+#         for gt_id in qrels_for_q.keys():
+#             if gt_id in pid or pid in gt_id:
+#                 return qrels_for_q[gt_id]
     
-    return 0
+#     return 0
 
 
 # Evaluation metrics
@@ -232,105 +232,74 @@ def dcg_at_k(gains, k):
     return dcg
 
 
-def ndcg_at_k(ranked_doc_entries, qrels_for_q, k):
+def ndcg_at_k(ranked_doc_ids, qrels_for_q, k):
     """
-    Normalized Discounted Cumulative Gain at k.
-    
-    Args:
-        ranked_doc_entries: List of (normalized_id, possible_ids) tuples
-        qrels_for_q: Dict of ground_truth_id -> relevance
-        k: Cutoff
+    NDCG@K — identical to Code 1.
+    ranked_doc_ids: list of doc_id strings (already canonical from get_doc_id).
     """
     gains = []
     seen_relevant = set()
-    
-    for doc_entry in ranked_doc_entries[:k]:
-        normalized_id, possible_ids = doc_entry
-        rel = check_doc_match(doc_entry, qrels_for_q)
-        
-        # Avoid double-counting same document
-        match_key = normalized_id or next(iter(possible_ids), "")
-        if rel > 0 and match_key not in seen_relevant:
-            gains.append(rel)
-            seen_relevant.add(match_key)
+
+    for doc_id in ranked_doc_ids[:k]:
+        if doc_id in qrels_for_q and doc_id not in seen_relevant:
+            gains.append(qrels_for_q[doc_id])
+            seen_relevant.add(doc_id)
         else:
             gains.append(0)
-    
+
     ideal = sorted(qrels_for_q.values(), reverse=True)
     if not ideal:
         return None
+
     return dcg_at_k(gains, k) / max(dcg_at_k(ideal, k), 1e-9)
 
 
-def recall_at_k(ranked_doc_entries, qrels_for_q, k, primary_only=False):
-    """Recall at k."""
+def recall_at_k(ranked_doc_ids, qrels_for_q, k, primary_only=False):
+    """Recall@K — identical to Code 1."""
     if primary_only:
         relevant = {d for d, r in qrels_for_q.items() if r >= 2}
     else:
         relevant = {d for d, r in qrels_for_q.items() if r > 0}
+
     if not relevant:
         return None
-    
-    # Track which ground truth docs have been matched to avoid double-counting
-    matched_gt_docs = set()
-    for doc_entry in ranked_doc_entries[:k]:
-        normalized_id, possible_ids = doc_entry
-        
-        # Find which ground truth doc this matches
-        for gt_id in qrels_for_q.keys():
-            if qrels_for_q[gt_id] > 0:
-                if primary_only and qrels_for_q[gt_id] < 2:
-                    continue
-                # Check if this retrieved doc matches this ground truth
-                if gt_id in possible_ids or normalized_id == gt_id:
-                    matched_gt_docs.add(gt_id)
-                    break
-                # Partial matching
-                for pid in possible_ids:
-                    if gt_id in pid or pid in gt_id:
-                        matched_gt_docs.add(gt_id)
-                        break
-    
-    return len(matched_gt_docs) / len(relevant)
+
+    retrieved = set(ranked_doc_ids[:k]) & relevant
+    return len(retrieved) / len(relevant)
 
 
-def average_precision(ranked_doc_entries, qrels_for_q):
-    """Average Precision."""
+def average_precision(ranked_doc_ids, qrels_for_q):
+    """MAP — identical to Code 1."""
     relevant = {d for d, r in qrels_for_q.items() if r > 0}
     if not relevant:
         return None
-    
+
     hits = 0
     precisions = []
     seen_relevant = set()
-    
-    for i, doc_entry in enumerate(ranked_doc_entries, start=1):
-        normalized_id, possible_ids = doc_entry
-        rel = check_doc_match(doc_entry, qrels_for_q)
-        match_key = normalized_id or next(iter(possible_ids), "")
-        
-        if rel > 0 and match_key not in seen_relevant:
+
+    for i, doc_id in enumerate(ranked_doc_ids, start=1):
+        if doc_id in relevant and doc_id not in seen_relevant:
             hits += 1
             precisions.append(hits / i)
-            seen_relevant.add(match_key)
-    
+            seen_relevant.add(doc_id)
+
     if not precisions:
         return 0.0
     return sum(precisions) / len(relevant)
 
 
-def mrr_at_k(ranked_doc_entries, qrels_for_q, k):
-    """Mean Reciprocal Rank at k."""
+def mrr_at_k(ranked_doc_ids, qrels_for_q, k):
+    """MRR@K — identical to Code 1."""
     relevant = {d for d, r in qrels_for_q.items() if r > 0}
     if not relevant:
         return None
-    
-    for i, doc_entry in enumerate(ranked_doc_entries[:k], start=1):
-        rel = check_doc_match(doc_entry, qrels_for_q)
-        if rel > 0:
-            return 1.0 / i
-    return 0.0
 
+    for i, doc_id in enumerate(ranked_doc_ids[:k], start=1):
+        if doc_id in relevant:
+            return 1.0 / i
+
+    return 0.0
 
 def evaluate_system(runs_for_system, qrels, ks=(5, 10, 20), ndcg_k=5):
     """
